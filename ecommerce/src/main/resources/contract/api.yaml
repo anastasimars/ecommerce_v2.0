@@ -1,0 +1,752 @@
+openapi: 3.0.0
+info:
+  title: Ecommerce API
+  version: 1.0.0
+  description: API for an e-commerce platform
+
+servers:
+  - url: http://localhost:8080
+
+paths:
+
+  /users/login:
+    post:
+      summary: User login
+      description: Allows users to log in by submitting their credentials.
+      operationId: loginUser
+      tags:
+        - Authentication
+      requestBody:
+        $ref: '#/components/requestBodies/UserLogin'
+      responses:
+        '200':
+          $ref: '#/components/responses/LoginSuccess'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+
+  /users/register:
+    post:
+      summary: Register a new user account
+      description: Allows a user to register a new account.
+      operationId: registerUser
+      tags:
+        - Authentication
+      requestBody:
+        $ref: '#/components/requestBodies/UserRegistration'
+      responses:
+        '201':
+          $ref: '#/components/responses/RegistrationSuccess'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /products:
+    get:
+      summary: Get available products
+      description: Retrieve available products with filtering and pagination options.
+      operationId: getAvailableProducts
+      tags:
+        - Products
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+          required: false
+          description: Product category to filter
+        - in: query
+          name: minPrice
+          schema:
+            type: number
+          required: false
+          description: Minimum product price
+        - in: query
+          name: maxPrice
+          schema:
+            type: number
+          required: false
+          description: Maximum product price
+        - in: query
+          name: page
+          schema:
+            type: integer
+            default: 0
+          required: false
+          description: Pagination page number
+        - in: query
+          name: size
+          schema:
+            type: integer
+            default: 25
+          required: false
+          description: Number of products per page
+      responses:
+        '200':
+          description: Successfully retrieved available products
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProductResponse'
+                  totalPages:
+                    type: integer
+                    example: 10
+                  totalElements:
+                    type: integer
+                    format: int64
+                    example: 250
+                  size:
+                    type: integer
+                    example: 25
+                  number:
+                    type: integer
+                    example: 0
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    post:
+      summary: Add a new product
+      description: Allows a user with the "seller" role to add a new product to the catalog.
+      operationId: addNewProduct
+      tags:
+        - Products
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewProductRequest'
+      responses:
+        '201':
+          description: Product added successfully
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '403':
+          description: Log in for access
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /products/{productId}:
+    patch:
+      summary: Update product details
+      description: Allows a user with the "seller" role to update the price or stock of an existing product.
+      operationId: updateProductDetails
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: productId
+          schema:
+            type: string
+            format: uuid
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              oneOf:
+                - $ref: '#/components/schemas/UpdateProductPriceRequest'
+                - $ref: '#/components/schemas/UpdateProductQuantityRequest'
+      responses:
+        '200':
+          description: Product details updated successfully.
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    delete:
+      summary: Delete a product
+      description: Allows a user with "seller" role to delete a product from the catalog.
+      operationId: deleteProduct
+      tags:
+        - Products
+      parameters:
+        - in: path
+          name: productId
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Product deleted successfully.
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /carts:
+    get:
+      summary: Show all items in the cart
+      description: Retrieves the list of items currently in the user's shopping cart. Accessible by clients.
+      operationId: showCart
+      tags:
+        - Carts
+      parameters:
+        - name: cartId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: A list of items in the cart with their quantities.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClientProductResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    post:
+      summary: Add product to cart
+      description: Allows a user with "client" role to add a products to their cart.
+      operationId: addToCart
+      tags:
+        - Carts
+      parameters:
+        - name: cartId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: itemId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: quantity
+          in: query
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful addition
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    patch:
+      summary: Update product quantity in cart
+      description: Allows a client to update the quantity of a product in their cart.
+      operationId: updateCartItemQuantity
+      tags:
+        - Carts
+      parameters:
+        - name: cartId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: itemId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: quantity
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successful update
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    delete:
+      summary: Remove product from cart
+      description: Allows a user with "client" role to remove a products to their cart.
+      operationId: removeFromCart
+      tags:
+        - Carts
+      parameters:
+        - name: cartId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: itemId
+          in: query
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successful removal
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+
+  /orders:
+
+    post:
+      summary: Place an order
+      description: Allows a user with "client" role to place an order.
+      operationId: placeOrder
+      tags:
+        - Orders
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                cartId:
+                  type: string
+                  format: uuid
+      responses:
+        '201':
+          description: Order placed successfully.
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    get:
+      summary: View all orders
+      description: Allows to view all orders.
+      operationId: viewAllOrders
+      tags:
+        - Orders
+      parameters:
+        - in: query
+          name: clientId
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Successfully retrieved list of all orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/OrderResponse'
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '401':
+          description: Unauthorized access attempt.
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /orders/{orderId}:
+    get:
+      summary: Track an order
+      description: Allows a user with role "client" to track the status of their order.
+      operationId: trackOrder
+      tags:
+        - Orders
+      parameters:
+        - in: path
+          name: orderId
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Order status information
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TrackResponse'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+    patch:
+      summary: Cancel an order
+      description: Allows a user with role "client" to cancel an order.
+      operationId: cancelOrder
+      tags:
+        - Orders
+      parameters:
+        - in: path
+          name: orderId
+          schema:
+            type: string
+            format: uuid
+          required: true
+      responses:
+        '200':
+          description: Order cancelled successfully.
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /orders/{orderId}/status:
+    patch:
+      summary: Update order status
+      description: Allows a user with role "seller" to update the status of an order.
+      operationId: updateOrderStatus
+      tags:
+        - Orders
+      parameters:
+        - in: path
+          name: orderId
+          schema:
+            type: string
+            format: uuid
+          required: true
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                status:
+                  $ref: '#/components/schemas/Status'
+      responses:
+        '200':
+          description: Order status updated successfully.
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+  /account:
+    post:
+      summary: Top up client account
+      description: Allows a  user with role "client" for topping up the account.
+      operationId: topUpAccount
+      tags:
+        - Account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddFundsRequest'
+      responses:
+        '201':
+          description: Account has been successfully topped up
+        '400':
+          $ref: '#/components/responses/BadRequestError'
+        '500':
+          $ref: '#/components/responses/ServerError'
+
+components:
+  requestBodies:
+    UserLogin:
+      description: User login credentials
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LoginRequest'
+    UserRegistration:
+      description: New user registration details
+      required: true
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RegistrationRequest'
+
+  schemas:
+
+    #util
+    Email:
+      type: string
+      format: email
+      description: User's email address
+
+    Address:
+      type: object
+      properties:
+        city:
+          type: string
+        street:
+          type: string
+        postalCode:
+          type: string
+        houseNumber:
+          type: string
+        apartmentNumber:
+          type: string
+
+    Currency:
+      type: string
+      enum: [ PLN, USD, EUR ]
+      description: Currency code (ISO 4217)
+      default: 'PLN'
+
+    Status:
+      type: string
+      enum: [ 'Received', 'In Preparation', 'Sent', 'Delivered', 'Payment Required', 'Cancelled' ]
+      description: The status of an order or a transaction
+
+    Error:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: Error code representing the error type.
+        message:
+          type: string
+          description: Message providing more details about the error.
+
+    # requests:
+    LoginRequest:
+      type: object
+      properties:
+        username:
+          type: string
+          description: User's username.
+        password:
+          type: string
+          description: User's password.
+          format: password
+
+    RegistrationRequest:
+      type: object
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        address:
+          $ref: '#/components/schemas/Address'
+        email:
+          $ref: '#/components/schemas/Email'
+        password:
+          type: string
+          description: Encrypted password
+
+    AddFundsRequest:
+      type: object
+      properties:
+        email:
+          $ref: '#/components/schemas/Email'
+        price:
+          type: number
+          minimum: 0
+          description: The value of the amount
+        currency:
+          $ref: '#/components/schemas/Currency'
+      description: Request to top up the client's account
+
+    NewProductRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the new product
+        description:
+          type: string
+          description: Description of the new product
+        price:
+          type: number
+          minimum: 0
+          description: The value of the amount
+        currency:
+          $ref: '#/components/schemas/Currency'
+        category:
+          type: string
+          description: Category of the new product
+        quantity:
+          type: integer
+          description: Quantity of the item
+
+    UpdateProductPriceRequest:
+      type: object
+      properties:
+        price:
+          type: number
+          description: New price of the item.
+
+    UpdateProductQuantityRequest:
+      type: object
+      properties:
+        quantity:
+          type: integer
+          description: New quantity of the item.
+
+    #response:
+
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          description: Access token to be used for subsequent requests.
+
+    RegistrationResponse:
+      type: object
+      properties:
+        clientId:
+          type: string
+          format: uuid
+          description: The unique identifier for the client.
+        clientStatus:
+          type: string
+          description: The status of the client as a string.
+
+    ClientProductResponse:
+      type: object
+      properties:
+        item:
+          allOf:
+            - $ref: '#/components/schemas/ProductResponse'
+          description: Details of the prosuct.
+        quantity:
+          type: integer
+          description: Quantity of the item in the cart.
+
+
+    ProductResponse:
+      type: object
+      properties:
+        technicalId:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: Name of the item.
+        description:
+          type: string
+          description: Detailed description of the item.
+        category:
+          type: string
+          description: Category of the item.
+        price:
+          type: number
+          description: Price of the item.
+        currency:
+          $ref: '#/components/schemas/Currency'
+
+    OrderResponse:
+      type: object
+      properties:
+        technicalId:
+          type: string
+          format: uuid
+          description: Unique identifier for the client order.
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductResponse'
+          description: List of items in the order.
+        totalAmount:
+          type: number
+          description: Total amount of the order.
+        currency:
+          type: string
+          description: Currency of the total amount.
+        orderDateTime:
+          type: string
+          format: 'date-time'
+          description: Date and time when the order was placed.
+        deliveryDateTime:
+          type: string
+          format: 'date-time'
+          description: Expected date and time for order delivery.
+        shippingMethod:
+          type: string
+          description: Method of shipping chosen for the order.
+        status:
+          type: string
+          description: Current status of the client order.
+
+    TrackResponse:
+      type: object
+      properties:
+        orderId:
+          type: string
+          format: uuid
+          description: The unique identifier for the order.
+        status:
+          type: string
+          description: The current status of the order.
+        orderDateTime:
+          type: string
+          format: date-time
+          description: Date and time when the order was placed.
+        deliveryDateTime:
+          type: string
+          format: date-time
+          description: Estimated date and time for the order delivery.
+
+  responses:
+    LoginSuccess:
+      description: Login successful, includes token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LoginResponse'
+    RegistrationSuccess:
+      description: Registration initiated, check email for confirmation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RegistrationResponse'
+    BadRequestError:
+      description: Bad request due to invalid input format.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFoundError:
+      description: Not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnauthorizedError:
+      description: Authentication failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ServerError:
+      description: Server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
