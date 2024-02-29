@@ -2,7 +2,7 @@ package pl.akademiaspecjalistowit.ecommerce.api.controller;
 
 import org.springframework.http.ResponseEntity;
 import pl.akademiaspecjalistowit.api.CartsApi;
-import pl.akademiaspecjalistowit.model.ClientProductResponse;
+import pl.akademiaspecjalistowit.model.CartProductResponse;
 
 import java.util.List;
 import java.util.UUID;
@@ -23,7 +23,7 @@ public class CartController implements CartsApi {
         return CartsApi.super.updateCartItemQuantity(cartId, itemId, quantity);
     }
     @Override
-    public ResponseEntity<List<ClientProductResponse>> showCart(UUID cartId) {
+    public ResponseEntity<List<CartProductResponse>> showCart(UUID cartId) {
         return CartsApi.super.showCart(cartId);
     }
 }

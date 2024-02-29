@@ -1,0 +1,35 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/ecommerce_v2
+    driver-class-name: org.postgresql.Driver
+    username: postgres
+    password: 1111
+
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+
+  liquibase:
+    enabled: true
+    change-log: db/changelog/db.changelog-master.yaml
+
+#  session:
+#    jdbc:
+#      initialize-schema: always # Inicjalizacja schematu sesji
+#    store-type: jdbc # U?ywanie JDBC do przechowywania sesji
+
+logging:
+  level:
+    org:
+      springframework:
+        security: DEBUG
+    liquibase: DEBUG
+
+server:
+  port: 8080
+
+
+
+
+

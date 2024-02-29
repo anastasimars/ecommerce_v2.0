@@ -210,7 +210,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/ClientProductResponse'
+                  $ref: '#/components/schemas/CartProductResponse'
         '400':
           $ref: '#/components/responses/BadRequestError'
         '404':
@@ -628,17 +628,27 @@ components:
           type: string
           description: The status of the client as a string.
 
-    ClientProductResponse:
+    CartProductResponse:
       type: object
       properties:
         item:
           allOf:
             - $ref: '#/components/schemas/ProductResponse'
-          description: Details of the prosuct.
+          description: Details of the item.
         quantity:
           type: integer
           description: Quantity of the item in the cart.
 
+    OrderProductResponse:
+      type: object
+      properties:
+        item:
+          allOf:
+            - $ref: '#/components/schemas/ProductResponse'
+          description: Details of the item in the order.
+        quantity:
+          type: integer
+          description: Quantity of the item ordered.
 
     ProductResponse:
       type: object
@@ -671,7 +681,7 @@ components:
         items:
           type: array
           items:
-            $ref: '#/components/schemas/ProductResponse'
+            $ref: '#/components/schemas/OrderProductResponse'
           description: List of items in the order.
         totalAmount:
           type: number

@@ -51,12 +51,12 @@
             <artifactId>spring-session-core</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-docker-compose</artifactId>
-            <scope>runtime</scope>
-            <optional>true</optional>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-docker-compose</artifactId>-->
+<!--            <scope>runtime</scope>-->
+<!--            <optional>true</optional>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
@@ -145,6 +145,15 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.liquibase</groupId>
+                <artifactId>liquibase-maven-plugin</artifactId>
+                <configuration>
+                    <changeLogFile>ecommerce/src/main/resources/db/changelog/db.changelog-master.yaml</changeLogFile>
+                    <propertyFile>ecommerce/src/main/resources/application.yaml</propertyFile>
+                    <propertyFileWillOverride>true</propertyFileWillOverride>
+                </configuration>
             </plugin>
         </plugins>
     </build>
