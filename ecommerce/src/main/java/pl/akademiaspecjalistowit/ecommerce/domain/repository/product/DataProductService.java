@@ -11,7 +11,7 @@ import java.util.UUID;
 @AllArgsConstructor
 public class DataProductService {
     private final ProductRepository productRepository;
-    public Optional<ProductEntity> getItemByTechnicalId(UUID technicalId) {
+    public Optional<ProductEntity> getProductByTechnicalId(UUID technicalId) {
         return productRepository
                 .findByTechnicalId(technicalId);
     }

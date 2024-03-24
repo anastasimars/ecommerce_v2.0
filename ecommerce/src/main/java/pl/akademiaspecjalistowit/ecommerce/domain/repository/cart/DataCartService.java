@@ -13,4 +13,8 @@ public class DataCartService {
     public Optional<CartEntity> getCartByTechnicalId(UUID technicalId) {
         return cartRepository.findByTechnicalId(technicalId);
     }
+
+    public CartEntity saveCart(CartEntity cart) {
+        return cartRepository.save(cart);
+    }
 }

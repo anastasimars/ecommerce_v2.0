@@ -1,0 +1,111 @@
+package pl.akademiaspecjalistowit.ecommerce.domain.service.cart;
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import pl.akademiaspecjalistowit.ecommerce.domain.model.ActiveUserEntity;
+import pl.akademiaspecjalistowit.ecommerce.domain.model.CartEntity;
+import pl.akademiaspecjalistowit.ecommerce.domain.model.CartProductEntity;
+import pl.akademiaspecjalistowit.ecommerce.domain.model.ProductEntity;
+import pl.akademiaspecjalistowit.ecommerce.domain.repository.cart.DataCartService;
+import pl.akademiaspecjalistowit.ecommerce.domain.repository.product.DataProductService;
+
+import java.util.Optional;
+import java.util.UUID;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+import static pl.akademiaspecjalistowit.ecommerce.TestData.*;
+
+@ExtendWith(MockitoExtension.class)
+class CartServiceImplTest {
+    @Mock
+    private DataCartService dataCartServiceMock;
+    @Mock
+    private DataProductService dataProductServiceMock;
+    @InjectMocks
+    private CartServiceImpl cartSuT;
+
+
+    @Test
+    void addItemToCart_whenProductExists_ShouldUpdateQuantity() {
+        //given data
+        UUID givenCartId = UUID.randomUUID();
+        UUID givenProductId = UUID.randomUUID();
+        Integer givenQuantityForExistingProduct = 1;
+        Integer quantityToAdd = 2;
+        ActiveUserEntity givenActiveUserEntity = preparedTestActiveUser();
+        CartEntity givenCartEntity = preparedTestEmptyCart(givenActiveUserEntity);
+        ProductEntity givenProductEntity = preparedTestProductEntity();
+
+        // simulate existing product
+        givenCartEntity.addProduct(givenProductEntity, givenQuantityForExistingProduct);
+
+        //prepare mock response from repository
+        when(dataCartServiceMock.getCartByTechnicalId(givenCartId))
+                .thenReturn(Optional.of(givenCartEntity));
+        when(dataProductServiceMock.getProductByTechnicalId(givenProductId))
+                .thenReturn(Optional.of(givenProductEntity));
+
+        //when
+        cartSuT.addProductToCart(givenCartId, givenProductId, quantityToAdd);
+
+        //then
+        verify(dataCartServiceMock).saveCart(givenCartEntity);
+        Optional<CartProductEntity> cartProduct = getCartProductEntity(givenCartEntity,
+                givenProductEntity);
+        assertEquals(givenQuantityForExistingProduct + quantityToAdd,
+                cartProduct.get().getQuantity());
+
+    }
+
+    @Test
+    void addItemToCart_whenProductDoesNotExist_shouldAddNewProduct() {
+        //given data
+        UUID givenCartId = UUID.randomUUID();
+        Integer givenQuantityForNewProduct = 1;
+        ActiveUserEntity givenActiveUser = preparedTestActiveUser();
+        CartEntity givenCartEntity = preparedTestCartWithProduct(givenActiveUser);
+        ProductEntity givenNewProductEntity = preparedTestProductEntity_2();
+        UUID givenNewProductEntityId = givenNewProductEntity.getTechnicalId();
+
+        //prepare mock response from repository
+        when(dataCartServiceMock.getCartByTechnicalId(givenCartId))
+                .thenReturn(Optional.of(givenCartEntity));
+        when(dataProductServiceMock.getProductByTechnicalId(givenNewProductEntityId))
+                .thenReturn(Optional.of(givenNewProductEntity));
+
+        //when
+        cartSuT.addProductToCart(givenCartId,
+                givenNewProductEntityId,
+                givenQuantityForNewProduct);
+
+        //then
+        verify(dataCartServiceMock).saveCart(givenCartEntity);
+        CartProductEntity newCartProductEntity = getCartProductEntity(givenCartEntity,
+                givenNewProductEntity).get();
+        assertEquals(givenQuantityForNewProduct, newCartProductEntity.getQuantity());
+        assertEquals(2, givenCartEntity.getProducts().size());
+    }
+
+    @Test
+    void removeItemFromCart() {
+    }
+
+    @Test
+    void updateCartItemQuantity() {
+    }
+
+    @Test
+    void showCart() {
+    }
+
+    private static Optional<CartProductEntity> getCartProductEntity(CartEntity givenCartEntity, ProductEntity givenProductEntity) {
+        return givenCartEntity.getProducts()
+                .stream().filter(cartProductEntity ->
+                        cartProductEntity.getProduct().equals(givenProductEntity)).findFirst();
+    }
+}

@@ -10,6 +10,6 @@ import java.util.UUID;
 
 @Repository
 public interface ProductRepository extends JpaRepository<ProductEntity, Long> {
-    @Query("SELECT i FROM ItemEntity i WHERE i.technicalId=:technicalId")
+    @Query("SELECT p FROM ProductEntity p WHERE p.technicalId=:technicalId")
     Optional<ProductEntity> findByTechnicalId(UUID technicalId);
 }
