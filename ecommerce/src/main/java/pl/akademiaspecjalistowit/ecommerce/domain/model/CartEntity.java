@@ -36,23 +36,28 @@ public class CartEntity {
         this.client = client;
     }
 
-    public void addItem(ProductEntity product, Integer quantity) {
+    public void addProduct(ProductEntity product, Integer quantity) {
         Optional<CartProductEntity> existProduct = findProductInCart(product);
         Integer productStockAmount = product.getStockState();
 
-        if(existProduct.isPresent()){
+        if (existProduct.isPresent()) {
             CartProductEntity existCartProduct = existProduct.get();
             updateCartItemQuantity(existCartProduct, quantity, productStockAmount);
-        } else{
+        } else {
             addNewProductToCart(product, quantity, productStockAmount);
         }
     }
 
+    public void removeProduct(UUID technicalId) {
+        products.removeIf(cartProductEntity -> cartProductEntity.getProduct()
+                .getTechnicalId().equals(technicalId));
+    }
+
     private void updateCartItemQuantity(CartProductEntity cartProduct,
-                                               Integer quantity,
-                                               Integer productStockAmount) {
+                                        Integer quantity,
+                                        Integer productStockAmount) {
         Integer newQuantity = cartProduct.getQuantity() + quantity;
-        if (productStockAmount >= newQuantity){
+        if (productStockAmount >= newQuantity) {
             cartProduct.updateQuantity(newQuantity);
         } else {
             throw new OutOfStockException("Insufficient stock for item: "
@@ -60,13 +65,13 @@ public class CartEntity {
         }
     }
 
-    private void addNewProductToCart(ProductEntity product, 
-                                     Integer quantity, 
+    private void addNewProductToCart(ProductEntity product,
+                                     Integer quantity,
                                      Integer productStockAmount) {
         if (productStockAmount >= quantity) {
-            CartProductEntity cartItem =
+            CartProductEntity cartProduct =
                     new CartProductEntity(this, product, quantity);
-            products.add(cartItem);
+            products.add(cartProduct);
         } else {
             throw new OutOfStockException("Insufficient stock for item: "
                     + product.getName());
@@ -79,8 +84,10 @@ public class CartEntity {
                         cartProductEntity.getProduct().equals(product)).findFirst();
     }
 
-    public void removeItem(UUID technicalId) {
-        products.removeIf(e -> e.getProduct().getTechnicalId().equals(technicalId));
+    public void assignUserToCart(ActiveUserEntity client) {
+        this.client = client;
+        if (client != null && client.getCart() != this) {
+            client.assignCartToUser(this);
+        }
     }
-
 }

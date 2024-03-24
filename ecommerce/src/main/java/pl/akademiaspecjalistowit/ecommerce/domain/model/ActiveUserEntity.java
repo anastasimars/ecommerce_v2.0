@@ -69,4 +69,11 @@ public class ActiveUserEntity {
         this.userRole = userRole;
         this.userEntity = userEntity;
     }
+
+    public void assignCartToUser(CartEntity cart) {
+        this.cart = cart;
+        if (cart != null && cart.getClient() != this) {
+            cart.assignUserToCart(this);
+        }
+    }
 }
