@@ -16,8 +16,8 @@ import java.util.Optional;
 import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.Mockito.*;
 import static pl.akademiaspecjalistowit.ecommerce.TestData.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -31,7 +31,7 @@ class CartServiceImplTest {
 
 
     @Test
-    void addItemToCart_whenProductExists_ShouldUpdateQuantity() {
+    void addItemToCart_whenProductExists_shouldUpdateQuantity() {
         //given data
         UUID givenCartId = UUID.randomUUID();
         UUID givenProductId = UUID.randomUUID();
@@ -92,7 +92,24 @@ class CartServiceImplTest {
     }
 
     @Test
-    void removeItemFromCart() {
+    void removeItemFromCart_shouldRemoveProductFromCart() {
+        //given data
+        ActiveUserEntity givenActiveUser = preparedTestActiveUser();
+        CartEntity givenCartEntity = preparedTestCartWithProduct(givenActiveUser);
+        UUID givenCartId = givenCartEntity.getTechnicalId();
+        CartProductEntity givenCartProductEntity = preparedTestCartProduct(givenCartEntity);
+        UUID givenProductEntityId = givenCartProductEntity.getProduct().getTechnicalId();
+
+        //prepare mock response from repository
+        when(dataCartServiceMock.getCartByTechnicalId(givenCartId))
+                .thenReturn(Optional.of(givenCartEntity));
+        //when
+        cartSuT.removeProductFromCart(givenCartId, givenProductEntityId);
+
+        //then
+        verify(dataCartServiceMock).saveCart(givenCartEntity);
+        verify(dataCartServiceMock, times(1)).saveCart(givenCartEntity);
+        assertFalse(givenCartEntity.getProducts().contains(givenCartProductEntity));
     }
 
     @Test

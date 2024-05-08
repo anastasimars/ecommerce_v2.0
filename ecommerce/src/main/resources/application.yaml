@@ -16,8 +16,8 @@ spring:
 
 #  session:
 #    jdbc:
-#      initialize-schema: always # Inicjalizacja schematu sesji
-#    store-type: jdbc # U?ywanie JDBC do przechowywania sesji
+#      initialize-schema: always
+#    store-type: jdbc
 
 logging:
   level:

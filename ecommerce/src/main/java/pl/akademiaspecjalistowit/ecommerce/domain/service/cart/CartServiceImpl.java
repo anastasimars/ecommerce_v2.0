@@ -32,8 +32,13 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
+    @Transactional
     public void removeProductFromCart(UUID cartId, UUID productId) {
-
+       CartEntity cart = dataCartService.getCartByTechnicalId(cartId)
+               .orElseThrow(()-> new CartNotFoundException(String
+                       .format("No cart with cartId: %s", cartId.toString())));
+        cart.removeProduct(productId);
+        dataCartService.saveCart(cart);
     }
 
     @Override
