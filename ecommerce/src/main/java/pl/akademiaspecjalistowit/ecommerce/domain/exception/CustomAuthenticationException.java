@@ -1,6 +1,7 @@
 package pl.akademiaspecjalistowit.ecommerce.domain.exception;
 
-import javax.naming.AuthenticationException;
+
+import org.springframework.security.core.AuthenticationException;
 
 public class CustomAuthenticationException extends AuthenticationException {
 

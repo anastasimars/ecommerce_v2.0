@@ -1,20 +1,26 @@
 package pl.akademiaspecjalistowit.ecommerce.api.controller;
 
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pl.akademiaspecjalistowit.api.UsersApi;
+import pl.akademiaspecjalistowit.ecommerce.domain.service.user.UserService;
 import pl.akademiaspecjalistowit.model.LoginRequest;
 import pl.akademiaspecjalistowit.model.LoginResponse;
 import pl.akademiaspecjalistowit.model.RegistrationRequest;
 import pl.akademiaspecjalistowit.model.RegistrationResponse;
-
+@AllArgsConstructor
 public class UserController implements UsersApi {
+    private final UserService userService;
     @Override
     public ResponseEntity<LoginResponse> loginUser(LoginRequest loginRequest) {
-        return UsersApi.super.loginUser(loginRequest);
+        userService.loginUser(loginRequest);
+        return ResponseEntity.ok().build();
     }
 
     @Override
     public ResponseEntity<RegistrationResponse> registerUser(RegistrationRequest registrationRequest) {
-        return UsersApi.super.registerUser(registrationRequest);
+        userService.registerUser(registrationRequest);
+        return ResponseEntity.ok().build();
     }
 }

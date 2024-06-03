@@ -5,7 +5,10 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import pl.akademiaspecjalistowit.ecommerce.domain.exceptionhandler.CustomAuthenticationFailureHandler;
 
 @Configuration
 @EnableWebSecurity
@@ -22,11 +25,22 @@ public class SecurityConfiguration {
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService))
-                                .loginPage("/oauth2/authorization/github")
-                                .defaultSuccessUrl("/test", true)
-                        );
+                        .loginPage("/oauth2/authorization/github")
+                        .defaultSuccessUrl("/test", true)
+                        .failureHandler(customAuthenticationFailureHandler())
+                );
 
         return http.build();
+    }
+
+    @Bean
+    public CustomAuthenticationFailureHandler customAuthenticationFailureHandler() {
+        return new CustomAuthenticationFailureHandler();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
     }
 
 }
