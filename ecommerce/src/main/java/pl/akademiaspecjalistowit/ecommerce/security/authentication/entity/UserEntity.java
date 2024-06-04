@@ -23,6 +23,9 @@ public class UserEntity implements UserDetails, OAuth2User {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private Set<AuthorityEntity> authorities = new HashSet<>();
+
+    @Column(nullable = false, unique = true)
+    private String email;
     @Column(unique = true)
     private String username;
 
@@ -34,9 +37,9 @@ public class UserEntity implements UserDetails, OAuth2User {
 
  //for creating a user with basic fields
     public UserEntity(Set<AuthorityEntity> authorities,
-                      String username, String password) {
+                      String email, String password) {
         this.authorities = authorities;
-        this.username = username;
+        this.email = email;
         this.password = password;
     }
 
@@ -65,7 +68,7 @@ public class UserEntity implements UserDetails, OAuth2User {
 
     @Override
     public String getUsername() {
-        return username;
+        return username != null ? username : email;
     }
 
     @Override

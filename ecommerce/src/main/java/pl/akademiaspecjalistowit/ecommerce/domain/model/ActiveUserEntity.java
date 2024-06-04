@@ -35,6 +35,9 @@ public class ActiveUserEntity {
     @JoinColumn(name = "cart_id")
     private CartEntity cart;
 
+    @Column(name = "username", unique = true)
+    private String username;
+
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
@@ -66,13 +69,14 @@ public class ActiveUserEntity {
     private UserEntity userEntity;
 
     public ActiveUserEntity(UUID technicalId, String name, String surname,
-                            CartEntity cart, String email, String password, Address address,
+                            CartEntity cart, String username, String email, String password, Address address,
                             Currency accountCurrency, BigDecimal accountBalance,
                             UserRole userRole, UserEntity userEntity) {
         this.technicalId = technicalId;
         this.name = name;
         this.surname = surname;
         this.cart = cart;
+        this.username = username;
         this.email = email;
         this.password = password;
         this.address = address;

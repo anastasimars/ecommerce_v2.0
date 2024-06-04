@@ -63,6 +63,7 @@ public class TestData {
                 PREPARED_USER_NAME,
                 PREPARED_USER_SURNAME,
                 null,
+                null,
                 PREPARED_EMAIL,
                 PREPARED_PASSWORD,
                 preparedTestAdress(),

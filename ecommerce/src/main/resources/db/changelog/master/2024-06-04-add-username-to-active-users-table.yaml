@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-username-to-active-users-table
+      author: Suitkina A.
+      changes:
+        - addColumn:
+            tableName: active_users
+            columns:
+              - column:
+                  name: username
+                  type: varchar(255)

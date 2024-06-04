@@ -47,6 +47,7 @@ public class UserServiceImpl implements UserService {
                 registrationRequest.getFirstName(),
                 registrationRequest.getLastName(),
                 null,
+                null,
                 registrationRequest.getEmail(),
                 encodedPassword,
                 registrationRequest.getAddress(),

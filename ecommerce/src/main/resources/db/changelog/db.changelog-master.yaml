@@ -7,4 +7,7 @@ databaseChangeLog:
       file: db/changelog/master/2024-02-29-add-foreign-key-constraints.yaml
   - include:
       file: db/changelog/master/2024-06-04-add-address-to-active-users.yaml
-
+  - include:
+      file: db/changelog/master/2024-06-04-add-username-to-active-users-table.yaml
+  - include:
+      file: db/changelog/master/2024-06-04-add-email-to-user-table.yaml
