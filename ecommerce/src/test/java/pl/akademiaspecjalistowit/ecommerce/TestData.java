@@ -5,6 +5,7 @@ import pl.akademiaspecjalistowit.ecommerce.domain.model.CartEntity;
 import pl.akademiaspecjalistowit.ecommerce.domain.model.CartProductEntity;
 import pl.akademiaspecjalistowit.ecommerce.domain.model.ProductEntity;
 import pl.akademiaspecjalistowit.ecommerce.util.values.UserRole;
+import pl.akademiaspecjalistowit.model.Address;
 
 import java.util.ArrayList;
 
@@ -53,6 +54,10 @@ public class TestData {
                 PREPARED_STOCK_STATE);
     }
 
+    public static Address preparedTestAdress(){
+        return new Address("Warszawa", "Żeromskiego", "01-887", "1", "2");
+    }
+
     public static ActiveUserEntity preparedTestActiveUser() {
         ActiveUserEntity activeUser = new ActiveUserEntity(PREPARED_UUID,
                 PREPARED_USER_NAME,
@@ -60,6 +65,7 @@ public class TestData {
                 null,
                 PREPARED_EMAIL,
                 PREPARED_PASSWORD,
+                preparedTestAdress(),
                 PREPARED_CURRENCY,
                 PREPARED_BALANCE,
                 UserRole.CLIENT,

@@ -498,6 +498,7 @@ components:
 
     Address:
       type: object
+      x-jpa-embeddable: true
       properties:
         city:
           type: string

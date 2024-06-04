@@ -1,0 +1,12 @@
+{{#modelPackage}}package {{modelPackage}};{{/modelPackage}}
+
+import javax.persistence.Embeddable;
+
+@Embeddable
+public class {{classname}} {
+{{#vars}}
+    private {{datatype}} {{name}};
+{{/vars}}
+
+// Getters and setters
+}

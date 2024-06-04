@@ -1,0 +1,23 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-address-fields-to-active-users-table
+      author: Suitkina A.
+      changes:
+        - addColumn:
+            tableName: active_users
+            columns:
+              - column:
+                  name: address_city
+                  type: varchar(255)
+              - column:
+                  name: address_street
+                  type: varchar(255)
+              - column:
+                  name: address_postal_code
+                  type: varchar(255)
+              - column:
+                  name: address_house_number
+                  type: varchar(255)
+              - column:
+                  name: address_apartment_number
+                  type: varchar(255)

@@ -8,6 +8,7 @@ import lombok.Setter;
 import pl.akademiaspecjalistowit.ecommerce.security.authentication.entity.UserEntity;
 import pl.akademiaspecjalistowit.ecommerce.util.values.UserRole;
 import pl.akademiaspecjalistowit.model.Currency;
+import pl.akademiaspecjalistowit.model.Address;
 
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -40,6 +41,16 @@ public class ActiveUserEntity {
     @Column(name = "password", nullable = false)
     private String password;
 
+    @Embedded
+    @AttributeOverrides({
+            @AttributeOverride(name = "city", column = @Column(name = "address_city")),
+            @AttributeOverride(name = "street", column = @Column(name = "address_street")),
+            @AttributeOverride(name = "postalCode", column = @Column(name = "address_postal_code")),
+            @AttributeOverride(name = "houseNumber", column = @Column(name = "address_house_number")),
+            @AttributeOverride(name = "apartmentNumber", column = @Column(name = "address_apartment_number"))
+    })
+    private Address address;
+
     @Enumerated(value = EnumType.STRING)
     @Column(name = "account_currency", nullable = false)
     private Currency accountCurrency;
@@ -55,7 +66,7 @@ public class ActiveUserEntity {
     private UserEntity userEntity;
 
     public ActiveUserEntity(UUID technicalId, String name, String surname,
-                            CartEntity cart, String email, String password,
+                            CartEntity cart, String email, String password, Address address,
                             Currency accountCurrency, BigDecimal accountBalance,
                             UserRole userRole, UserEntity userEntity) {
         this.technicalId = technicalId;
@@ -64,6 +75,7 @@ public class ActiveUserEntity {
         this.cart = cart;
         this.email = email;
         this.password = password;
+        this.address = address;
         this.accountCurrency = accountCurrency;
         this.accountBalance = accountBalance;
         this.userRole = userRole;

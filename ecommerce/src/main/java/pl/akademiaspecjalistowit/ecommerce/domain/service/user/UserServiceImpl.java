@@ -49,6 +49,7 @@ public class UserServiceImpl implements UserService {
                 null,
                 registrationRequest.getEmail(),
                 encodedPassword,
+                registrationRequest.getAddress(),
                 Currency.PLN,
                 BigDecimal.ZERO,
                 UserRole.CLIENT,

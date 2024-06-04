@@ -116,6 +116,7 @@
                             <apiPackage>pl.akademiaspecjalistowit.api</apiPackage>
                             <modelPackage>pl.akademiaspecjalistowit.model</modelPackage>
                             <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
+                            <templateResourcePath>${project.basedir}/src/main/resources/templates</templateResourcePath>
                             <configOptions>
                                 <modelNameSuffix>Dto</modelNameSuffix>
                                 <additionalModelTypeAnnotations>
