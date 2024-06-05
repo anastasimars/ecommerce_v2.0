@@ -24,8 +24,8 @@ spring:
       client:
         registration:
           github:
-            clientId: Ov23liAk8lAQ72P1nHcj
-            clientSecret: c8c6f8e82b6d9efb9ec06452dea94e29b97fc072
+            clientId: ${GITHUB_CLIENT_ID}
+            clientSecret: ${GITHUB_CLIENT_SECRET}
             scope: read:user, user:email
         provider:
           github:
@@ -33,6 +33,19 @@ spring:
             token-uri: https://github.com/login/oauth/access_token
             user-info-uri: https://api.github.com/user
             user-name-attribute: id
+
+  mail:
+    host: ${MAIL_HOST}
+    port: ${MAIL_PORT}
+    username: ${MAIL_USERNAME}
+    password: ${MAIL_PASSWORD}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+
 
 logging:
   level:

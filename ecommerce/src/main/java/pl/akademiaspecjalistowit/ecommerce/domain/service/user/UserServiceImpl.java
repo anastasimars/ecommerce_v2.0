@@ -5,6 +5,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.akademiaspecjalistowit.ecommerce.domain.model.ActiveUserEntity;
 import pl.akademiaspecjalistowit.ecommerce.domain.repository.ActiveUserRepository;
+import pl.akademiaspecjalistowit.ecommerce.email.service.EmailService;
 import pl.akademiaspecjalistowit.ecommerce.security.authentication.entity.AuthorityEntity;
 import pl.akademiaspecjalistowit.ecommerce.security.authentication.entity.UserEntity;
 import pl.akademiaspecjalistowit.ecommerce.security.authentication.repository.UserRepository;
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ActiveUserRepository activeUserRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EmailService emailService;
 
     @Override
     public void loginUser(LoginRequest loginRequest) {
@@ -57,5 +59,20 @@ public class UserServiceImpl implements UserService {
                 newUser
         );
         activeUserRepository.save(activeUser);
+    }
+
+    @Override
+    public void sendActivationEmail(UserEntity user) {
+        String activationLink = "http://localhost:8080/activate?token=" + generateActivationToken(user);
+        String username = user.getUsername();
+        String email = user.getEmail();
+        String message = String.format("Hello %s,\n\nPlease click the link below to activate your account:\n%s",
+                username, activationLink);
+        emailService.sendEmail(email, "Account Activation", message);
+    }
+
+    private String generateActivationToken(UserEntity user) {
+        //todo
+        return "706977";
     }
 }

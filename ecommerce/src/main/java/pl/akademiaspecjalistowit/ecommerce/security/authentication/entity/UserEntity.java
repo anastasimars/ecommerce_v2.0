@@ -44,8 +44,9 @@ public class UserEntity implements UserDetails, OAuth2User {
     }
 
     // for OAuth2 authentication
-    public UserEntity(Set<AuthorityEntity> authorities, String username, String password, Map<String, Object> attributes) {
+    public UserEntity(Set<AuthorityEntity> authorities, String email, String username, String password, Map<String, Object> attributes) {
         this.authorities = authorities;
+        this.email = email;
         this.username = username;
         this.password = password;
         this.attributes = attributes;
@@ -64,6 +65,10 @@ public class UserEntity implements UserDetails, OAuth2User {
     @Override
     public String getPassword() {
         return password;
+    }
+
+    public String getEmail() {
+        return email;
     }
 
     @Override
