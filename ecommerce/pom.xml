@@ -89,6 +89,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-mail</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.github.spullara.mustache.java</groupId>
+            <artifactId>compiler</artifactId>
+            <version>0.9.6</version>
+        </dependency>
     </dependencies>
 
     <build>
@@ -105,7 +110,7 @@
                     </excludes>
                 </configuration>
             </plugin>
-            <plugin>
+           <plugin>
                 <groupId>org.openapitools</groupId>
                 <artifactId>openapi-generator-maven-plugin</artifactId>
                 <version>7.1.0</version>
@@ -120,7 +125,7 @@
                             <apiPackage>pl.akademiaspecjalistowit.api</apiPackage>
                             <modelPackage>pl.akademiaspecjalistowit.model</modelPackage>
                             <supportingFilesToGenerate>ApiUtil.java</supportingFilesToGenerate>
-                            <templateResourcePath>${project.basedir}/src/main/resources/templates</templateResourcePath>
+                           <templateDirectory>${project.basedir}/src/main/resources/templates</templateDirectory>
                             <configOptions>
                                 <modelNameSuffix>Dto</modelNameSuffix>
                                 <additionalModelTypeAnnotations>
