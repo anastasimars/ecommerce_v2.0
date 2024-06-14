@@ -1,4 +1,4 @@
-package pl.akademiaspecjalistowit.ecommerce.security.authentication.entity;
+package pl.akademiaspecjalistowit.ecommerce.user.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;

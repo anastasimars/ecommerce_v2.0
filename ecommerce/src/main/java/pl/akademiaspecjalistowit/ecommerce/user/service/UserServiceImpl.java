@@ -1,4 +1,4 @@
-package pl.akademiaspecjalistowit.ecommerce.domain.service.user;
+package pl.akademiaspecjalistowit.ecommerce.user.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -6,9 +6,11 @@ import org.springframework.stereotype.Service;
 import pl.akademiaspecjalistowit.ecommerce.domain.model.ActiveUserEntity;
 import pl.akademiaspecjalistowit.ecommerce.domain.repository.ActiveUserRepository;
 import pl.akademiaspecjalistowit.ecommerce.email.service.EmailService;
-import pl.akademiaspecjalistowit.ecommerce.security.authentication.entity.AuthorityEntity;
-import pl.akademiaspecjalistowit.ecommerce.security.authentication.entity.UserEntity;
-import pl.akademiaspecjalistowit.ecommerce.security.authentication.repository.UserRepository;
+import pl.akademiaspecjalistowit.ecommerce.user.entity.AuthorityEntity;
+import pl.akademiaspecjalistowit.ecommerce.user.entity.UserEntity;
+import pl.akademiaspecjalistowit.ecommerce.user.repository.UserRepository;
+import pl.akademiaspecjalistowit.ecommerce.user.token.ActivationToken;
+import pl.akademiaspecjalistowit.ecommerce.user.token.ActivationTokenRepository;
 import pl.akademiaspecjalistowit.ecommerce.util.values.UserRole;
 import pl.akademiaspecjalistowit.model.Currency;
 import pl.akademiaspecjalistowit.model.LoginRequest;
@@ -25,24 +27,27 @@ public class UserServiceImpl implements UserService {
     private final ActiveUserRepository activeUserRepository;
     private final PasswordEncoder passwordEncoder;
     private final EmailService emailService;
+    private final ActivationTokenRepository activationTokenRepository;
 
     @Override
     public void loginUser(LoginRequest loginRequest) {
-
+        //todo
     }
 
     @Override
     public void registerUser(RegistrationRequest registrationRequest) {
-        String username = registrationRequest.getEmail();
-        if (userRepository.findByUsername(username).isPresent()) {
-            throw new IllegalArgumentException("Username is already taken");
+        String email = registrationRequest.getEmail();
+        if (userRepository.findByEmail(email).isPresent()) {
+            throw new IllegalArgumentException("Email is already exist");
         }
         String encodedPassword = passwordEncoder.encode(registrationRequest.getPassword());
 
         AuthorityEntity authority = new AuthorityEntity("ROLE_CLIENT");
 
-        UserEntity newUser = new UserEntity(Set.of(authority), username, encodedPassword);
+        UserEntity newUser = new UserEntity(Set.of(authority), email, encodedPassword);
         userRepository.save(newUser);
+
+        sendActivationEmail(newUser);
 
         ActiveUserEntity activeUser = new ActiveUserEntity(
                 UUID.randomUUID(),
@@ -72,7 +77,9 @@ public class UserServiceImpl implements UserService {
     }
 
     private String generateActivationToken(UserEntity user) {
-        //todo
-        return "706977";
+        String token = UUID.randomUUID().toString();
+        ActivationToken activationToken = new ActivationToken(token, user);
+        activationTokenRepository.save(activationToken);
+        return token;
     }
 }

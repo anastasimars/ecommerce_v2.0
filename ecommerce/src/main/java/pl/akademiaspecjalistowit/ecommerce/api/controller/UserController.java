@@ -1,10 +1,9 @@
 package pl.akademiaspecjalistowit.ecommerce.api.controller;
 
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import pl.akademiaspecjalistowit.api.UsersApi;
-import pl.akademiaspecjalistowit.ecommerce.domain.service.user.UserService;
+import pl.akademiaspecjalistowit.ecommerce.user.service.UserService;
 import pl.akademiaspecjalistowit.model.LoginRequest;
 import pl.akademiaspecjalistowit.model.LoginResponse;
 import pl.akademiaspecjalistowit.model.RegistrationRequest;
@@ -22,5 +21,6 @@ public class UserController implements UsersApi {
     public ResponseEntity<RegistrationResponse> registerUser(RegistrationRequest registrationRequest) {
         userService.registerUser(registrationRequest);
         return ResponseEntity.ok().build();
+       // return ResponseEntity.ok("Registration successful. Please check your email for verification instructions.");
     }
 }

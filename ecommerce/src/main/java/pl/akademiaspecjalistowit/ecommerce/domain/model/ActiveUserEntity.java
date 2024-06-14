@@ -5,7 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pl.akademiaspecjalistowit.ecommerce.security.authentication.entity.UserEntity;
+import pl.akademiaspecjalistowit.ecommerce.user.entity.UserEntity;
 import pl.akademiaspecjalistowit.ecommerce.util.values.UserRole;
 import pl.akademiaspecjalistowit.model.Currency;
 import pl.akademiaspecjalistowit.model.Address;

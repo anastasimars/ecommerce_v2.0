@@ -1,6 +1,6 @@
-package pl.akademiaspecjalistowit.ecommerce.domain.service.user;
+package pl.akademiaspecjalistowit.ecommerce.user.service;
 
-import pl.akademiaspecjalistowit.ecommerce.security.authentication.entity.UserEntity;
+import pl.akademiaspecjalistowit.ecommerce.user.entity.UserEntity;
 import pl.akademiaspecjalistowit.model.LoginRequest;
 import pl.akademiaspecjalistowit.model.RegistrationRequest;
 
