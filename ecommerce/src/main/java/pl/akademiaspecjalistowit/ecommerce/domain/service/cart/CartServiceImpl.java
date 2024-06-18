@@ -1,8 +1,9 @@
 package pl.akademiaspecjalistowit.ecommerce.domain.service.cart;
 
-import jakarta.transaction.Transactional;
+
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.akademiaspecjalistowit.ecommerce.domain.exception.CartNotFoundException;
 import pl.akademiaspecjalistowit.ecommerce.domain.exception.ItemNotFoundException;
 import pl.akademiaspecjalistowit.ecommerce.domain.model.CartEntity;

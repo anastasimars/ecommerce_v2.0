@@ -13,3 +13,5 @@ databaseChangeLog:
       file: db/changelog/master/2024-06-04-add-email-to-user-table.yaml
   - include:
       file: db/changelog/master/2024-06-11-add-tokens-table.yaml
+  - include:
+      file: db/changelog/master/2024-06-18-add-status-to-active-user-table.yaml

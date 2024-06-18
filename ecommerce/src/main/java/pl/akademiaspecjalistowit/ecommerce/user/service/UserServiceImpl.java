@@ -3,6 +3,9 @@ package pl.akademiaspecjalistowit.ecommerce.user.service;
 import lombok.AllArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import pl.akademiaspecjalistowit.ecommerce.domain.exception.ActivationTokenException;
+import pl.akademiaspecjalistowit.ecommerce.domain.exception.UserNotFoundException;
 import pl.akademiaspecjalistowit.ecommerce.domain.model.ActiveUserEntity;
 import pl.akademiaspecjalistowit.ecommerce.domain.repository.ActiveUserRepository;
 import pl.akademiaspecjalistowit.ecommerce.email.service.EmailService;
@@ -12,6 +15,7 @@ import pl.akademiaspecjalistowit.ecommerce.user.repository.UserRepository;
 import pl.akademiaspecjalistowit.ecommerce.user.token.ActivationToken;
 import pl.akademiaspecjalistowit.ecommerce.user.token.ActivationTokenRepository;
 import pl.akademiaspecjalistowit.ecommerce.util.values.UserRole;
+import pl.akademiaspecjalistowit.ecommerce.util.values.UserStatus;
 import pl.akademiaspecjalistowit.model.Currency;
 import pl.akademiaspecjalistowit.model.LoginRequest;
 import pl.akademiaspecjalistowit.model.RegistrationRequest;
@@ -44,12 +48,10 @@ public class UserServiceImpl implements UserService {
 
         AuthorityEntity authority = new AuthorityEntity("ROLE_CLIENT");
 
-        UserEntity newUser = new UserEntity(Set.of(authority), email, encodedPassword);
-        userRepository.save(newUser);
+        UserEntity user = new UserEntity(Set.of(authority), email, encodedPassword);
+        userRepository.save(user);
 
-        sendActivationEmail(newUser);
-
-        ActiveUserEntity activeUser = new ActiveUserEntity(
+        ActiveUserEntity newUser = new ActiveUserEntity(
                 UUID.randomUUID(),
                 registrationRequest.getFirstName(),
                 registrationRequest.getLastName(),
@@ -61,10 +63,15 @@ public class UserServiceImpl implements UserService {
                 Currency.PLN,
                 BigDecimal.ZERO,
                 UserRole.CLIENT,
-                newUser
+                user
         );
-        activeUserRepository.save(activeUser);
+        activeUserRepository.save(newUser);
+
+        sendActivationEmail(user);
+
     }
+
+
 
     @Override
     public void sendActivationEmail(UserEntity user) {
@@ -81,5 +88,15 @@ public class UserServiceImpl implements UserService {
         ActivationToken activationToken = new ActivationToken(token, user);
         activationTokenRepository.save(activationToken);
         return token;
+    }
+    @Transactional
+    public void activateUser(String token) {
+        ActivationToken activationToken = activationTokenRepository.findByToken(token).orElseThrow(() ->
+                new ActivationTokenException("Invalid activation token"));
+        ActiveUserEntity activeUser = activeUserRepository.findByUserEntity(activationToken.getUser())
+                .orElseThrow(() -> new UserNotFoundException("User not found"));
+        activeUser.changeStatus(UserStatus.ACTIVE);
+        activeUserRepository.save(activeUser);
+        activationTokenRepository.delete(activationToken);
     }
 }

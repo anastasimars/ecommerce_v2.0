@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pl.akademiaspecjalistowit.ecommerce.user.entity.UserEntity;
 import pl.akademiaspecjalistowit.ecommerce.util.values.UserRole;
+import pl.akademiaspecjalistowit.ecommerce.util.values.UserStatus;
 import pl.akademiaspecjalistowit.model.Currency;
 import pl.akademiaspecjalistowit.model.Address;
 
@@ -61,7 +62,13 @@ public class ActiveUserEntity {
     @Column(name = "account_balance", nullable = false)
     private BigDecimal accountBalance;
 
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "user_role")
     private UserRole userRole;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(name = "user_status")
+    private UserStatus status;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -84,6 +91,7 @@ public class ActiveUserEntity {
         this.accountBalance = accountBalance;
         this.userRole = userRole;
         this.userEntity = userEntity;
+        this.status = UserStatus.INACTIVE;
     }
 
     public void assignCartToUser(CartEntity cart) {
@@ -91,5 +99,9 @@ public class ActiveUserEntity {
         if (cart != null && cart.getClient() != this) {
             cart.assignUserToCart(this);
         }
+    }
+
+    public void changeStatus(UserStatus status) {
+        this.status = status;
     }
 }

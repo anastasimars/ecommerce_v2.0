@@ -487,6 +487,43 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/RegistrationRequest'
+  responses:
+    LoginSuccess:
+      description: Login successful, includes token
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/LoginResponse'
+    RegistrationSuccess:
+      description: Registration initiated, check email for confirmation
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RegistrationResponse'
+    BadRequestError:
+      description: Bad request due to invalid input format.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFoundError:
+      description: Not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    UnauthorizedError:
+      description: Authentication failed.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ServerError:
+      description: Server error.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
 
   schemas:
 
@@ -609,7 +646,6 @@ components:
           type: integer
           description: New quantity of the item.
 
-    #response:
 
     LoginResponse:
       type: object
@@ -724,40 +760,3 @@ components:
           format: date-time
           description: Estimated date and time for the order delivery.
 
-  responses:
-    LoginSuccess:
-      description: Login successful, includes token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/LoginResponse'
-    RegistrationSuccess:
-      description: Registration initiated, check email for confirmation
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/RegistrationResponse'
-    BadRequestError:
-      description: Bad request due to invalid input format.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFoundError:
-      description: Not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UnauthorizedError:
-      description: Authentication failed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    ServerError:
-      description: Server error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
