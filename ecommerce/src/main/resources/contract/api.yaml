@@ -17,14 +17,31 @@ paths:
       tags:
         - Authentication
       requestBody:
-        $ref: '#/components/requestBodies/UserLogin'
+        description: Login request object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
       responses:
         '200':
-          $ref: '#/components/responses/LoginSuccess'
+          description: User logged in successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
         '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '400':
-          $ref: '#/components/responses/BadRequestError'
+          description: Invalid username/password supplied
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
   /users/register:
     post:
@@ -34,15 +51,66 @@ paths:
       tags:
         - Authentication
       requestBody:
-        $ref: '#/components/requestBodies/UserRegistration'
+        description: Registration request object
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegistrationRequest'
       responses:
         '201':
-          $ref: '#/components/responses/RegistrationSuccess'
+          description: Registration initiated, check email for confirmation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegistrationResponse'
         '400':
-          $ref: '#/components/responses/BadRequestError'
+          description: Bad request due to invalid input format.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
         '500':
-          $ref: '#/components/responses/ServerError'
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 
+  /users/activate:
+    get:
+      summary: Activate a user account
+      description: Allows a user to activate their account using an activation token.
+      operationId: activateUser
+      tags:
+        - Authentication
+      parameters:
+        - in: query
+          name: token
+          schema:
+            type: string
+          required: true
+          description: Activation token sent via email
+      responses:
+        '200':
+          description: Account successfully activated
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Account successfully activated
+        '400':
+          description: Invalid activation token
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '500':
+          description: Server error.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
   /products:
     get:
       summary: Get available products
@@ -472,62 +540,9 @@ paths:
           $ref: '#/components/responses/ServerError'
 
 components:
-  requestBodies:
-    UserLogin:
-      description: User login credentials
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/LoginRequest'
-    UserRegistration:
-      description: New user registration details
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/RegistrationRequest'
-  responses:
-    LoginSuccess:
-      description: Login successful, includes token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/LoginResponse'
-    RegistrationSuccess:
-      description: Registration initiated, check email for confirmation
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/RegistrationResponse'
-    BadRequestError:
-      description: Bad request due to invalid input format.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFoundError:
-      description: Not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UnauthorizedError:
-      description: Authentication failed.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    ServerError:
-      description: Server error.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
 
   schemas:
 
-    #util
     Email:
       type: string
       format: email
@@ -570,7 +585,6 @@ components:
           type: string
           description: Message providing more details about the error.
 
-    # requests:
     LoginRequest:
       type: object
       properties:
@@ -645,7 +659,6 @@ components:
         quantity:
           type: integer
           description: New quantity of the item.
-
 
     LoginResponse:
       type: object
