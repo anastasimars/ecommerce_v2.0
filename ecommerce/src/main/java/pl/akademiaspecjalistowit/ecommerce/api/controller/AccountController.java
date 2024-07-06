@@ -3,8 +3,7 @@ package pl.akademiaspecjalistowit.ecommerce.api.controller;
 import org.springframework.http.ResponseEntity;
 import pl.akademiaspecjalistowit.api.AccountApi;
 import pl.akademiaspecjalistowit.model.AddFundsRequest;
-
-public class AccountController implements AccountApi {
+class AccountController implements AccountApi {
     @Override
     public ResponseEntity<Void> topUpAccount(AddFundsRequest addFundsRequest) {
         return AccountApi.super.topUpAccount(addFundsRequest);

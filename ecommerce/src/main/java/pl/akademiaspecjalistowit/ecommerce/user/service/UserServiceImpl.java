@@ -16,9 +16,7 @@ import pl.akademiaspecjalistowit.ecommerce.user.token.ActivationToken;
 import pl.akademiaspecjalistowit.ecommerce.user.token.ActivationTokenRepository;
 import pl.akademiaspecjalistowit.ecommerce.util.values.UserRole;
 import pl.akademiaspecjalistowit.ecommerce.util.values.UserStatus;
-import pl.akademiaspecjalistowit.model.Currency;
-import pl.akademiaspecjalistowit.model.LoginRequest;
-import pl.akademiaspecjalistowit.model.RegistrationRequest;
+import pl.akademiaspecjalistowit.model.*;
 
 import java.math.BigDecimal;
 import java.util.Set;
@@ -34,12 +32,13 @@ public class UserServiceImpl implements UserService {
     private final ActivationTokenRepository activationTokenRepository;
 
     @Override
-    public void loginUser(LoginRequest loginRequest) {
-        //todo
+    public LoginResponse loginUser(LoginRequest loginRequest) {
+       //todo
+        return new LoginResponse("logicShouldBeImplemented");
     }
 
     @Override
-    public void registerUser(RegistrationRequest registrationRequest) {
+    public RegistrationResponse registerUser(RegistrationRequest registrationRequest) {
         String email = registrationRequest.getEmail();
         if (userRepository.findByEmail(email).isPresent()) {
             throw new IllegalArgumentException("Email is already exist");
@@ -48,7 +47,7 @@ public class UserServiceImpl implements UserService {
 
         AuthorityEntity authority = new AuthorityEntity("ROLE_CLIENT");
 
-        UserEntity user = new UserEntity(Set.of(authority), email, encodedPassword);
+        UserEntity user = new UserEntity(Set.of(authority), email, encodedPassword, "test");
         userRepository.save(user);
 
         ActiveUserEntity newUser = new ActiveUserEntity(
@@ -63,12 +62,12 @@ public class UserServiceImpl implements UserService {
                 Currency.PLN,
                 BigDecimal.ZERO,
                 UserRole.CLIENT,
-                user
-        );
+                user);
         activeUserRepository.save(newUser);
 
         sendActivationEmail(user);
 
+        return new RegistrationResponse(newUser.getTechnicalId(), newUser.getStatus().toString());
     }
 
 
@@ -89,6 +88,7 @@ public class UserServiceImpl implements UserService {
         activationTokenRepository.save(activationToken);
         return token;
     }
+    @Override
     @Transactional
     public void activateUser(String token) {
         ActivationToken activationToken = activationTokenRepository.findByToken(token).orElseThrow(() ->

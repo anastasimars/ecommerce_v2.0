@@ -26,7 +26,7 @@ public class UserEntity implements UserDetails, OAuth2User {
 
     @Column(nullable = false, unique = true)
     private String email;
-    @Column(unique = true)
+    @Column
     private String username;
 
     private String password;
@@ -37,10 +37,11 @@ public class UserEntity implements UserDetails, OAuth2User {
 
  //for creating a user with basic fields
     public UserEntity(Set<AuthorityEntity> authorities,
-                      String email, String password) {
+                      String email, String password, String username) {
         this.authorities = authorities;
         this.email = email;
         this.password = password;
+        this.username = username;
     }
 
     // for OAuth2 authentication

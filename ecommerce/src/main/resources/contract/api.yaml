@@ -9,7 +9,7 @@ servers:
 
 paths:
 
-  /users/login:
+  /login:
     post:
       summary: User login
       description: Allows users to log in by submitting their credentials.
@@ -43,7 +43,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /users/register:
+  /register:
     post:
       summary: Register a new user account
       description: Allows a user to register a new account.

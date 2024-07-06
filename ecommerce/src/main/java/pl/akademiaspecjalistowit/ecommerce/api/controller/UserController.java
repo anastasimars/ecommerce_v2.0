@@ -1,26 +1,23 @@
 package pl.akademiaspecjalistowit.ecommerce.api.controller;
 
 import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import pl.akademiaspecjalistowit.api.UsersApi;
 import pl.akademiaspecjalistowit.ecommerce.user.service.UserService;
-import pl.akademiaspecjalistowit.model.LoginRequest;
-import pl.akademiaspecjalistowit.model.LoginResponse;
-import pl.akademiaspecjalistowit.model.RegistrationRequest;
-import pl.akademiaspecjalistowit.model.RegistrationResponse;
 @AllArgsConstructor
-public class UserController implements UsersApi {
+class UserController{
     private final UserService userService;
-    @Override
-    public ResponseEntity<LoginResponse> loginUser(LoginRequest loginRequest) {
-        userService.loginUser(loginRequest);
-        return ResponseEntity.ok().build();
+
+    public ResponseEntity<String> activateUser(String token){
+        try{
+            userService.activateUser(token);
+            return new ResponseEntity<>("Account successfully activated", HttpStatus.OK);
+        }catch (IllegalArgumentException e){
+            return new ResponseEntity<>("Invalid activation token", HttpStatus.BAD_REQUEST);
+        }catch (Exception e){
+            return new ResponseEntity<>("Internal server error", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
-    @Override
-    public ResponseEntity<RegistrationResponse> registerUser(RegistrationRequest registrationRequest) {
-        userService.registerUser(registrationRequest);
-        return ResponseEntity.ok().build();
-       // return ResponseEntity.ok("Registration successful. Please check your email for verification instructions.");
-    }
 }

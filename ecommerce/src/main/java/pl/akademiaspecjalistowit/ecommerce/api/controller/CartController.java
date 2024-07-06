@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.UUID;
 
 @AllArgsConstructor
-public class CartController implements CartsApi {
+class CartController implements CartsApi {
     private final CartService cartService;
 
     @Override

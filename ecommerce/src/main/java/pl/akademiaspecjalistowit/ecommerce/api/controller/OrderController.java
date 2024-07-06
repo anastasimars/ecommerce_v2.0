@@ -10,7 +10,7 @@ import pl.akademiaspecjalistowit.model.UpdateOrderStatusRequest;
 import java.util.List;
 import java.util.UUID;
 
-public class OrderController implements OrdersApi {
+class OrderController implements OrdersApi {
     @Override
     public ResponseEntity<List<OrderResponse>> viewAllOrders(UUID clientId) {
         return OrdersApi.super.viewAllOrders(clientId);

@@ -9,7 +9,7 @@ import pl.akademiaspecjalistowit.model.UpdateProductDetailsRequest;
 import java.math.BigDecimal;
 import java.util.UUID;
 
-public class ProductController implements ProductsApi {
+class ProductController implements ProductsApi {
     @Override
     public ResponseEntity<GetAvailableProducts200Response> getAvailableProducts(String category, BigDecimal minPrice, BigDecimal maxPrice, Integer page, Integer size) {
         return ProductsApi.super.getAvailableProducts(category, minPrice, maxPrice, page, size);
