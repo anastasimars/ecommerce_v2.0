@@ -450,26 +450,6 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /account:
-    post:
-      summary: Top up client account
-      description: Allows a  user with role "client" for topping up the account.
-      operationId: topUpAccount
-      tags:
-        - Account
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AddFundsRequest'
-      responses:
-        '201':
-          description: Account has been successfully topped up
-        '400':
-          $ref: '#/components/responses/BadRequestError'
-        '500':
-          $ref: '#/components/responses/ServerError'
 
 components:
   requestBodies:
@@ -559,18 +539,6 @@ components:
           type: string
           description: Encrypted password
 
-    AddFundsRequest:
-      type: object
-      properties:
-        email:
-          $ref: '#/components/schemas/Email'
-        price:
-          type: number
-          minimum: 0
-          description: The value of the amount
-        currency:
-          $ref: '#/components/schemas/Currency'
-      description: Request to top up the client's account
 
     NewProductRequest:
       type: object

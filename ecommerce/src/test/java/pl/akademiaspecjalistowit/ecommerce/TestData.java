@@ -1,9 +1,9 @@
 package pl.akademiaspecjalistowit.ecommerce;
 
-import pl.akademiaspecjalistowit.ecommerce.domain.model.ActiveUserEntity;
-import pl.akademiaspecjalistowit.ecommerce.domain.model.CartEntity;
-import pl.akademiaspecjalistowit.ecommerce.domain.model.CartProductEntity;
-import pl.akademiaspecjalistowit.ecommerce.domain.model.ProductEntity;
+import pl.akademiaspecjalistowit.ecommerce.activeuser.model.ActiveUserEntity;
+import pl.akademiaspecjalistowit.ecommerce.cart.model.CartEntity;
+import pl.akademiaspecjalistowit.ecommerce.cart.model.CartProductEntity;
+import pl.akademiaspecjalistowit.ecommerce.product.model.ProductEntity;
 import pl.akademiaspecjalistowit.ecommerce.util.values.UserRole;
 
 import java.util.ArrayList;
