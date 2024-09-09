@@ -3,6 +3,7 @@ package pl.akademiaspecjalistowit.ecommerce.cart;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
 import pl.akademiaspecjalistowit.api.CartsApi;
 import pl.akademiaspecjalistowit.ecommerce.cart.logic.service.CartService;
 import pl.akademiaspecjalistowit.model.CartProductResponse;
@@ -10,6 +11,7 @@ import pl.akademiaspecjalistowit.model.CartProductResponse;
 import java.util.List;
 import java.util.UUID;
 
+@RestController
 @AllArgsConstructor
 class CartController implements CartsApi {
     private final CartService cartService;

@@ -43,13 +43,13 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /products:
+  /catalog:
     get:
       summary: Get available products
       description: Retrieve available products with filtering and pagination options.
       operationId: getAvailableProducts
       tags:
-        - Products
+        - Catalog
       parameters:
         - in: query
           name: category
@@ -113,12 +113,13 @@ paths:
         '500':
           $ref: '#/components/responses/ServerError'
 
+  /seller/products:
     post:
       summary: Add a new product
-      description: Allows a user with the "seller" role to add a new product to the catalog.
+      description: Allows a user with "seller" role to add a new product.
       operationId: addNewProduct
       tags:
-        - Products
+        - Seller Products
       requestBody:
         required: true
         content:
@@ -127,15 +128,13 @@ paths:
               $ref: '#/components/schemas/NewProductRequest'
       responses:
         '201':
-          description: Product added successfully
+          description: Product added successfully.
         '400':
           $ref: '#/components/responses/BadRequestError'
-        '403':
-          description: Log in for access
         '500':
           $ref: '#/components/responses/ServerError'
 
-  /products/{productId}:
+  /seller/products/{productId}:
     patch:
       summary: Update product details
       description: Allows a user with the "seller" role to update the price or stock of an existing product.
@@ -154,9 +153,18 @@ paths:
         content:
           application/json:
             schema:
+              type: object
+              properties:
+                price:
+                  type: string
+                  format: decimal
+                  description: "New price of the item."
+                quantity:
+                  type: integer
+                  description: "New quantity of the item."
               oneOf:
-                - $ref: '#/components/schemas/UpdateProductPriceRequest'
-                - $ref: '#/components/schemas/UpdateProductQuantityRequest'
+                - required: ["price"]
+                - required: ["quantity"]
       responses:
         '200':
           description: Product details updated successfully.
@@ -562,19 +570,6 @@ components:
           type: integer
           description: Quantity of the item
 
-    UpdateProductPriceRequest:
-      type: object
-      properties:
-        price:
-          type: number
-          description: New price of the item.
-
-    UpdateProductQuantityRequest:
-      type: object
-      properties:
-        quantity:
-          type: integer
-          description: New quantity of the item.
 
     #response:
 
