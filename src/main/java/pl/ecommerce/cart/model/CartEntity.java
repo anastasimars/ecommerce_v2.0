@@ -74,7 +74,7 @@ public class CartEntity {
             CartProductEntity cartProduct =
                     new CartProductEntity(this, product, quantity);
             products.add(cartProduct);
-            System.out.println("Grzesiek test");
+            System.out.println("Grzesiek test brancha");
         } else {
             throw new OutOfStockException("Insufficient stock for item: "
                     + product.getName());
