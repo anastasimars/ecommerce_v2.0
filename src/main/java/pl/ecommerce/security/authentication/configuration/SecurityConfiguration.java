@@ -23,7 +23,6 @@ public class SecurityConfiguration {
                         .userInfoEndpoint(userInfo -> userInfo
                                 .userService(customOAuth2UserService))
                                 .loginPage("/oauth2/authorization/github")
-                                .defaultSuccessUrl("/test", true)
                         );
 
         return http.build();
