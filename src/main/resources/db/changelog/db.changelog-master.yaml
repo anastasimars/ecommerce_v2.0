@@ -5,4 +5,12 @@ databaseChangeLog:
       file: db/changelog/master/2024-02-29-create-entity-tables.yaml
   - include:
       file: db/changelog/master/2024-02-29-add-foreign-key-constraints.yaml
+  - include:
+      file: db/changelog/master/2024-09-12-remove-fields-from-active-users-table.yaml
+  - include:
+      file: db/changelog/master/2024-09-12-remove-users-and-authorities-tables.yaml
+  - include:
+      file: db/changelog/master/2024-09-20-delete-active-users-table.yaml
+  - include:
+      file: db/changelog/master/2024-09-20-add-user-id-to-cart.yaml
 

@@ -1,0 +1,12 @@
+databaseChangeLog:
+  - changeSet:
+      id: remove-users-and-authorities-tables
+      author: Siutkina A.
+      changes:
+        - dropForeignKeyConstraint:
+            baseTableName: authorities
+            constraintName: fk_authorities_users
+        - dropTable:
+            tableName: authorities
+        - dropTable:
+            tableName: users

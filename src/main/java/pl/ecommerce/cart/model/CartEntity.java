@@ -5,7 +5,6 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import pl.ecommerce.exception.OutOfStockException;
-import pl.ecommerce.activeuser.model.ActiveUserEntity;
 import pl.ecommerce.product.model.ProductEntity;
 
 import java.util.ArrayList;
@@ -28,14 +27,14 @@ public class CartEntity {
     @OneToMany(mappedBy = "cart", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartProductEntity> products = new ArrayList<>();
 
-    @OneToOne(mappedBy = "cart")
-    private ActiveUserEntity client;
+    @Column(name = "user_id", nullable = false)
+    private UUID userId;
 
     public CartEntity(UUID technicalId, List<CartProductEntity> products,
-                      ActiveUserEntity client) {
+                      UUID userId) {
         this.technicalId = technicalId;
         this.products = products;
-        this.client = client;
+        this.userId = userId;
     }
 
     public void addProduct(ProductEntity product, Integer quantity) {
@@ -87,10 +86,7 @@ public class CartEntity {
                         cartProductEntity.getProduct().equals(product)).findFirst();
     }
 
-    public void assignUserToCart(ActiveUserEntity client) {
-        this.client = client;
-        if (client != null && client.getCart() != this) {
-            client.assignCartToUser(this);
-        }
+    public void assignUserToCart(UUID userId) {
+        this.userId = userId;
     }
 }

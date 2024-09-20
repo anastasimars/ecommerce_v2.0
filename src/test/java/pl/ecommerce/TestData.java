@@ -1,32 +1,32 @@
 package pl.ecommerce;
 
-import pl.ecommerce.activeuser.model.ActiveUserEntity;
+
 import pl.ecommerce.cart.model.CartEntity;
 import pl.ecommerce.cart.model.CartProductEntity;
 import pl.ecommerce.product.model.ProductEntity;
-import pl.ecommerce.util.values.UserRole;
 
 import java.util.ArrayList;
+import java.util.UUID;
 
 import static pl.ecommerce.PreparedTestConstants.*;
 
 public class TestData {
 
-    public static CartEntity preparedTestEmptyCart(ActiveUserEntity activeUser) {
+    public static CartEntity preparedTestEmptyCart(UUID userId) {
         CartEntity cartEntity = new CartEntity(PREPARED_UUID,
                 new ArrayList<>(),
                null);
-        cartEntity.assignUserToCart(activeUser);
+        cartEntity.assignUserToCart(userId);
         return cartEntity;
     }
 
-    public static CartEntity preparedTestCartWithProduct(ActiveUserEntity activeUser) {
+    public static CartEntity preparedTestCartWithProduct(UUID userId) {
         CartEntity cartEntity = new CartEntity(PREPARED_UUID,
                 new ArrayList<>(),
                 null);
         ProductEntity productEntity = preparedTestProductEntity();
         cartEntity.addProduct(productEntity, PREPARED_QUANTITY);
-        cartEntity.assignUserToCart(activeUser);
+        cartEntity.assignUserToCart(userId);
         return cartEntity;
     }
     public static CartProductEntity preparedTestCartProduct(CartEntity cart) {
@@ -53,20 +53,6 @@ public class TestData {
                 PREPARED_STOCK_STATE);
     }
 
-    public static ActiveUserEntity preparedTestActiveUser() {
-        ActiveUserEntity activeUser = new ActiveUserEntity(PREPARED_UUID,
-                PREPARED_USER_NAME,
-                PREPARED_USER_SURNAME,
-                null,
-                PREPARED_EMAIL,
-                PREPARED_PASSWORD,
-                PREPARED_CURRENCY,
-                PREPARED_BALANCE,
-                UserRole.CLIENT,
-                null);
-        CartEntity cartEntity = preparedTestEmptyCart(activeUser);
-        activeUser.assignCartToUser(cartEntity);
-        return activeUser;
-    }
+
 
 }

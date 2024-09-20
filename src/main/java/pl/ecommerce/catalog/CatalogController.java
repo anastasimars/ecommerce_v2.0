@@ -2,6 +2,7 @@ package pl.ecommerce.catalog;
 
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.ecommerce.api.CatalogApi;
 import pl.ecommerce.catalog.logic.service.CatalogService;
@@ -20,5 +21,10 @@ class CatalogController implements CatalogApi {
                                                                                 BigDecimal maxPrice,
                                                                                 Integer page, Integer size) {
         return CatalogApi.super.getAvailableProducts(category, minPrice, maxPrice, page, size);
+    }
+
+    @GetMapping("/test")
+    public ResponseEntity<String> test() {
+        return ResponseEntity.ok("it works");
     }
 }
