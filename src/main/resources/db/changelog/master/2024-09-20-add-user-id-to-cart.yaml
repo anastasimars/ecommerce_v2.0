@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: add-user-id-to-cart
+      author: Siutkina A.
+      changes:
+        - addColumn:
+            tableName: cart
+            columns:
+              - column:
+                  name: user_id
+                  type: UUID
+                  constraints:
+                    nullable: false

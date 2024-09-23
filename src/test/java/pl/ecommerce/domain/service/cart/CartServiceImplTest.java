@@ -6,7 +6,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.ecommerce.cart.logic.service.CartServiceImpl;
-import pl.ecommerce.activeuser.model.ActiveUserEntity;
 import pl.ecommerce.cart.model.CartEntity;
 import pl.ecommerce.cart.model.CartProductEntity;
 import pl.ecommerce.product.model.ProductEntity;
@@ -36,10 +35,10 @@ class CartServiceImplTest {
         //given data
         UUID givenCartId = UUID.randomUUID();
         UUID givenProductId = UUID.randomUUID();
+        UUID givenUserId = UUID.randomUUID();
         Integer givenQuantityForExistingProduct = 1;
         Integer quantityToAdd = 2;
-        ActiveUserEntity givenActiveUserEntity = preparedTestActiveUser();
-        CartEntity givenCartEntity = preparedTestEmptyCart(givenActiveUserEntity);
+        CartEntity givenCartEntity = preparedTestEmptyCart(givenUserId);
         ProductEntity givenProductEntity = preparedTestProductEntity();
 
         // simulate existing product
@@ -67,9 +66,9 @@ class CartServiceImplTest {
     void addItemToCart_whenProductDoesNotExist_shouldAddNewProduct() {
         //given data
         UUID givenCartId = UUID.randomUUID();
+        UUID givenUserId = UUID.randomUUID();
         Integer givenQuantityForNewProduct = 1;
-        ActiveUserEntity givenActiveUser = preparedTestActiveUser();
-        CartEntity givenCartEntity = preparedTestCartWithProduct(givenActiveUser);
+        CartEntity givenCartEntity = preparedTestCartWithProduct(givenUserId);
         ProductEntity givenNewProductEntity = preparedTestProductEntity_2();
         UUID givenNewProductEntityId = givenNewProductEntity.getTechnicalId();
 
@@ -95,8 +94,8 @@ class CartServiceImplTest {
     @Test
     void removeItemFromCart_shouldRemoveProductFromCart() {
         //given data
-        ActiveUserEntity givenActiveUser = preparedTestActiveUser();
-        CartEntity givenCartEntity = preparedTestCartWithProduct(givenActiveUser);
+        UUID givenUserId = UUID.randomUUID();
+        CartEntity givenCartEntity = preparedTestCartWithProduct(givenUserId);
         UUID givenCartId = givenCartEntity.getTechnicalId();
         CartProductEntity givenCartProductEntity = preparedTestCartProduct(givenCartEntity);
         UUID givenProductEntityId = givenCartProductEntity.getProduct().getTechnicalId();

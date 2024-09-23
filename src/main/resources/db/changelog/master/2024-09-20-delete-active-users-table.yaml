@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - changeSet:
+      id: delete-active-users-table
+      author: Siutkina A.
+      changes:
+        - dropTable:
+            tableName: active_users

@@ -14,12 +14,7 @@ public interface PreparedTestConstants {
     String PREPARED_PRODUCT_CATEGORY = "Phones";
     String PREPARED_PRODUCT_CATEGORY_2 = "Fruits";
     String PREPARED_PRODUCT_DESCRIPTION = "Test product description";
-    String PREPARED_USER_NAME = "John";
-    String PREPARED_USER_SURNAME = "Doe";
-    String PREPARED_EMAIL = "doe@gmail.com";
-    String PREPARED_PASSWORD = "u70604kvl4";
     BigDecimal PREPARED_PRICE = new BigDecimal("19.99");
-    BigDecimal PREPARED_BALANCE = new BigDecimal("909.09");
     Currency PREPARED_CURRENCY = Currency.PLN;
     Integer PREPARED_QUANTITY = 1;
     Integer PREPARED_STOCK_STATE = 10;

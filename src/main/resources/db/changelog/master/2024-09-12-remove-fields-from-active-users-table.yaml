@@ -1,0 +1,17 @@
+databaseChangeLog:
+  - changeSet:
+      id: remove-fields-from-active-users-table
+      author: Suitkina A.
+      changes:
+        - dropColumn:
+            columnName: password
+            tableName: active_users
+        - dropColumn:
+            columnName: account_currency
+            tableName: active_users
+        - dropColumn:
+            columnName: account_balance
+            tableName: active_users
+        - dropColumn:
+            columnName: user_id
+            tableName: active_users

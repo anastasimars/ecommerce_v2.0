@@ -8,41 +8,6 @@ servers:
   - url: http://localhost:8080
 
 paths:
-
-  /users/login:
-    post:
-      summary: User login
-      description: Allows users to log in by submitting their credentials.
-      operationId: loginUser
-      tags:
-        - Authentication
-      requestBody:
-        $ref: '#/components/requestBodies/UserLogin'
-      responses:
-        '200':
-          $ref: '#/components/responses/LoginSuccess'
-        '401':
-          $ref: '#/components/responses/UnauthorizedError'
-        '400':
-          $ref: '#/components/responses/BadRequestError'
-
-  /users/register:
-    post:
-      summary: Register a new user account
-      description: Allows a user to register a new account.
-      operationId: registerUser
-      tags:
-        - Authentication
-      requestBody:
-        $ref: '#/components/requestBodies/UserRegistration'
-      responses:
-        '201':
-          $ref: '#/components/responses/RegistrationSuccess'
-        '400':
-          $ref: '#/components/responses/BadRequestError'
-        '500':
-          $ref: '#/components/responses/ServerError'
-
   /catalog:
     get:
       summary: Get available products
@@ -460,22 +425,6 @@ paths:
 
 
 components:
-  requestBodies:
-    UserLogin:
-      description: User login credentials
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/LoginRequest'
-    UserRegistration:
-      description: New user registration details
-      required: true
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/RegistrationRequest'
-
   schemas:
 
     #util
@@ -520,34 +469,6 @@ components:
           type: string
           description: Message providing more details about the error.
 
-    # requests:
-    LoginRequest:
-      type: object
-      properties:
-        username:
-          type: string
-          description: User's username.
-        password:
-          type: string
-          description: User's password.
-          format: password
-
-    RegistrationRequest:
-      type: object
-      properties:
-        firstName:
-          type: string
-        lastName:
-          type: string
-        address:
-          $ref: '#/components/schemas/Address'
-        email:
-          $ref: '#/components/schemas/Email'
-        password:
-          type: string
-          description: Encrypted password
-
-
     NewProductRequest:
       type: object
       properties:
@@ -572,25 +493,6 @@ components:
 
 
     #response:
-
-    LoginResponse:
-      type: object
-      properties:
-        token:
-          type: string
-          description: Access token to be used for subsequent requests.
-
-    RegistrationResponse:
-      type: object
-      properties:
-        clientId:
-          type: string
-          format: uuid
-          description: The unique identifier for the client.
-        clientStatus:
-          type: string
-          description: The status of the client as a string.
-
     CartProductResponse:
       type: object
       properties:
@@ -687,18 +589,6 @@ components:
           description: Estimated date and time for the order delivery.
 
   responses:
-    LoginSuccess:
-      description: Login successful, includes token
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/LoginResponse'
-    RegistrationSuccess:
-      description: Registration initiated, check email for confirmation
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/RegistrationResponse'
     BadRequestError:
       description: Bad request due to invalid input format.
       content:
@@ -707,12 +597,6 @@ components:
             $ref: '#/components/schemas/Error'
     NotFoundError:
       description: Not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    UnauthorizedError:
-      description: Authentication failed.
       content:
         application/json:
           schema:
