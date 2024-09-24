@@ -1,10 +1,11 @@
-package pl.ecommerce.order;
+package pl.ecommerce.order.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import pl.ecommerce.model.Currency;
+
+import pl.ecommerce.util.values.Currency;
 import pl.ecommerce.util.values.OrderStatus;
 
 import java.math.BigDecimal;

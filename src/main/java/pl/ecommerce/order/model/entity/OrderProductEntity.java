@@ -1,10 +1,10 @@
-package pl.ecommerce.order;
+package pl.ecommerce.order.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import pl.ecommerce.product.model.ProductEntity;
+import pl.ecommerce.product.model.entity.ProductEntity;
 
 import java.util.UUID;
 

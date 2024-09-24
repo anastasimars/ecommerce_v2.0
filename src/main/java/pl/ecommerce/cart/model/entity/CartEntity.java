@@ -1,11 +1,11 @@
-package pl.ecommerce.cart.model;
+package pl.ecommerce.cart.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import pl.ecommerce.exception.OutOfStockException;
-import pl.ecommerce.product.model.ProductEntity;
+import pl.ecommerce.product.model.entity.ProductEntity;
 
 import java.util.ArrayList;
 import java.util.List;

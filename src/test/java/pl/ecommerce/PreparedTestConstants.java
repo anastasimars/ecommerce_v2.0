@@ -2,7 +2,7 @@ package pl.ecommerce;
 
 
 
-import pl.ecommerce.model.Currency;
+import pl.ecommerce.util.values.Currency;
 
 import java.math.BigDecimal;
 import java.util.UUID;

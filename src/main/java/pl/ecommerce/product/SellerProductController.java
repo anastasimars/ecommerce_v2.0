@@ -3,40 +3,41 @@ package pl.ecommerce.product;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
-import pl.ecommerce.api.SellerApi;
-import pl.ecommerce.model.NewProductRequest;
-import pl.ecommerce.model.UpdateProductDetailsRequest;
+import org.springframework.web.bind.annotation.*;
 import pl.ecommerce.product.logic.service.SellerProductService;
+import pl.ecommerce.product.model.dto.NewProductRequest;
+import pl.ecommerce.product.model.dto.UpdateProductDetailsRequest;
 
-import java.math.BigDecimal;
 import java.util.UUID;
+
 @RestController
+@RequestMapping("/api")
 @AllArgsConstructor
-class SellerProductController implements SellerApi {
+class SellerProductController {
     private final SellerProductService sellerProductService;
 
-    @Override
-    public ResponseEntity<Void> addNewProduct(NewProductRequest newProductRequest) {
-        sellerProductService.addNewProduct(newProductRequest);
+    @PostMapping("/seller/products")
+    public ResponseEntity<Void> addNewProduct(@RequestBody NewProductRequest request) {
+        sellerProductService.addNewProduct(request);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-    @Override
-    public ResponseEntity<Void> deleteProduct(UUID productId) {
+    @DeleteMapping("/seller/products/{productId}")
+    public ResponseEntity<Void> deleteProduct(@PathVariable UUID productId) {
         sellerProductService.deleteProduct(productId);
         return ResponseEntity.noContent().build();
     }
 
-    @Override
-    public ResponseEntity<Void> updateProductDetails(UUID productId,
-                                                     UpdateProductDetailsRequest updateProductDetailsRequest) {
-        if (updateProductDetailsRequest.getPrice() != null) {
-            BigDecimal price = updateProductDetailsRequest.getPrice();
-            sellerProductService.updateProductPrice(productId, price);
-        } else if (updateProductDetailsRequest.getQuantity() != null) {
-            Integer quantity = updateProductDetailsRequest.getQuantity();
-            sellerProductService.updateProductQuantity(productId, quantity);
+    @PatchMapping("/seller/products/{productId}")
+    public ResponseEntity<Void> updateProductDetails(@PathVariable UUID productId,
+                                                     @RequestBody UpdateProductDetailsRequest request) {
+        if (request.price() != null && request.quantity() != null) {
+            sellerProductService.updateProductPrice(productId, request.price());
+            sellerProductService.updateProductQuantity(productId, request.quantity());
+        } else if (request.price() != null) {
+            sellerProductService.updateProductPrice(productId,request.price());
+        } else if (request.quantity() != null) {
+            sellerProductService.updateProductQuantity(productId, request.quantity());
         } else {
             return ResponseEntity.badRequest().build();
         }

@@ -1,4 +1,4 @@
-package pl.ecommerce.cart.model;
+package pl.ecommerce.cart.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.*;
@@ -6,7 +6,7 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import pl.ecommerce.product.model.ProductEntity;
+import pl.ecommerce.product.model.entity.ProductEntity;
 
 @Entity
 @Getter

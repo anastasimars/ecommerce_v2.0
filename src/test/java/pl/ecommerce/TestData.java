@@ -1,9 +1,9 @@
 package pl.ecommerce;
 
 
-import pl.ecommerce.cart.model.CartEntity;
-import pl.ecommerce.cart.model.CartProductEntity;
-import pl.ecommerce.product.model.ProductEntity;
+import pl.ecommerce.cart.model.entity.CartEntity;
+import pl.ecommerce.cart.model.entity.CartProductEntity;
+import pl.ecommerce.product.model.entity.ProductEntity;
 
 import java.util.ArrayList;
 import java.util.UUID;

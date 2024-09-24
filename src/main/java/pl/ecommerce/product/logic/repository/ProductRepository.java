@@ -3,7 +3,7 @@ package pl.ecommerce.product.logic.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-import pl.ecommerce.product.model.ProductEntity;
+import pl.ecommerce.product.model.entity.ProductEntity;
 
 import java.util.Optional;
 import java.util.UUID;

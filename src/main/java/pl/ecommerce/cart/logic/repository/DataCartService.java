@@ -2,7 +2,7 @@ package pl.ecommerce.cart.logic.repository;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.ecommerce.cart.model.CartEntity;
+import pl.ecommerce.cart.model.entity.CartEntity;
 
 import java.util.Optional;
 import java.util.UUID;

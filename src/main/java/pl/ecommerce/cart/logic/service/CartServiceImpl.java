@@ -4,12 +4,12 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.ecommerce.cart.logic.repository.DataCartService;
-import pl.ecommerce.cart.model.CartEntity;
+import pl.ecommerce.cart.model.dto.CartProductResponse;
+import pl.ecommerce.cart.model.entity.CartEntity;
 import pl.ecommerce.exception.CartNotFoundException;
 import pl.ecommerce.exception.ItemNotFoundException;
-import pl.ecommerce.model.CartProductResponse;
 import pl.ecommerce.product.logic.repository.DataProductService;
-import pl.ecommerce.product.model.ProductEntity;
+import pl.ecommerce.product.model.entity.ProductEntity;
 
 import java.util.List;
 import java.util.UUID;
