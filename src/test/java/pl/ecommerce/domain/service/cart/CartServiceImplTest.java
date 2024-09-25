@@ -6,9 +6,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import pl.ecommerce.cart.logic.service.CartServiceImpl;
-import pl.ecommerce.cart.model.CartEntity;
-import pl.ecommerce.cart.model.CartProductEntity;
-import pl.ecommerce.product.model.ProductEntity;
+import pl.ecommerce.cart.model.entity.CartEntity;
+import pl.ecommerce.cart.model.entity.CartProductEntity;
+import pl.ecommerce.product.model.entity.ProductEntity;
 import pl.ecommerce.cart.logic.repository.DataCartService;
 import pl.ecommerce.product.logic.repository.DataProductService;
 

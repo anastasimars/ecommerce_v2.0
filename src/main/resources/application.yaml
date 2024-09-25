@@ -16,9 +16,6 @@ spring:
 
 logging:
   level:
-    org:
-      springframework:
-        security: DEBUG
     liquibase: DEBUG
 
 server:

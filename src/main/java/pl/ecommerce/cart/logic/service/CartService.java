@@ -1,6 +1,8 @@
 package pl.ecommerce.cart.logic.service;
 
-import pl.ecommerce.model.CartProductResponse;
+
+
+import pl.ecommerce.cart.model.dto.CartProductResponse;
 
 import java.util.List;
 import java.util.UUID;

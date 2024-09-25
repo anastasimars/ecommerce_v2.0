@@ -1,6 +1,8 @@
 package pl.ecommerce.product.logic.service;
 
-import pl.ecommerce.model.NewProductRequest;
+
+
+import pl.ecommerce.product.model.dto.NewProductRequest;
 
 import java.math.BigDecimal;
 import java.util.UUID;

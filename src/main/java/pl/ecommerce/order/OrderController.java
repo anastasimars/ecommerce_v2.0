@@ -1,38 +1,48 @@
 package pl.ecommerce.order;
 
+import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import pl.ecommerce.api.OrdersApi;
-import pl.ecommerce.model.OrderResponse;
-import pl.ecommerce.model.PlaceOrderRequest;
-import pl.ecommerce.model.TrackResponse;
-import pl.ecommerce.model.UpdateOrderStatusRequest;
+import org.springframework.web.bind.annotation.*;
+import pl.ecommerce.order.model.dto.OrderResponse;
+import pl.ecommerce.order.model.dto.PlaceOrderRequest;
+import pl.ecommerce.order.model.dto.TrackResponse;
+import pl.ecommerce.order.model.dto.UpdateOrderStatusRequest;
 
 import java.util.List;
 import java.util.UUID;
 
-class OrderController implements OrdersApi {
-    @Override
+@RestController
+@RequestMapping("/api")
+@AllArgsConstructor
+class OrderController {
+    @GetMapping("/customer/orders")
     public ResponseEntity<List<OrderResponse>> viewAllOrders(UUID clientId) {
-        return OrdersApi.super.viewAllOrders(clientId);
+        //will be implemented in a separate issue
+        return null;
     }
 
-    @Override
-    public ResponseEntity<Void> placeOrder(  PlaceOrderRequest placeOrderRequest) {
-        return OrdersApi.super.placeOrder(placeOrderRequest);
+    @PostMapping("/customer/orders/place")
+    public ResponseEntity<Void> placeOrder(@RequestBody PlaceOrderRequest request) {
+        //will be implemented in a separate issue
+        return null;
     }
 
-    @Override
-    public ResponseEntity<Void> cancelOrder(UUID orderId) {
-        return OrdersApi.super.cancelOrder(orderId);
+    @DeleteMapping("/customer/orders/{orderId}")
+    public ResponseEntity<Void> cancelOrder(@PathVariable UUID orderId) {
+        //will be implemented in a separate issue
+        return null;
     }
 
-    @Override
-    public ResponseEntity<TrackResponse> trackOrder(UUID orderId) {
-        return OrdersApi.super.trackOrder(orderId);
+    @GetMapping("/customer/orders/track/{orderId}")
+    public ResponseEntity<TrackResponse> trackOrder(@PathVariable UUID orderId) {
+        //will be implemented in a separate issue
+        return null;
     }
 
-    @Override
-    public ResponseEntity<Void> updateOrderStatus(UUID orderId, UpdateOrderStatusRequest updateOrderStatusRequest) {
-        return OrdersApi.super.updateOrderStatus(orderId, updateOrderStatusRequest);
+    @PutMapping("/seller/orders/{orderId}/status")
+    public ResponseEntity<Void> updateOrderStatus(@PathVariable UUID orderId,
+                                                  @RequestBody UpdateOrderStatusRequest request) {
+        //will be implemented in a separate issue
+        return null;
     }
 }
