@@ -1,9 +1,9 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/ecommerce_v2
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
     driver-class-name: org.postgresql.Driver
-    username: postgres
-    password: 1111
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
 
   jpa:
     show-sql: true
@@ -17,6 +17,7 @@ spring:
 logging:
   level:
     liquibase: DEBUG
+    root: DEBUG
 
 server:
   port: 8082

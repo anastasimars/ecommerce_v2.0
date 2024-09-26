@@ -8,17 +8,19 @@ services:
     depends_on:
       - postgres
       - liquibase
+    env_file: .env
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ecommerce_v2
-      SPRING_DATASOURCE_USERNAME: postgres
-      SPRING_DATASOURCE_PASSWORD: 1111
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
+      SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
 
   postgres:
     image: postgres:latest
+    env_file: .env
     environment:
-      POSTGRES_DB: ecommerce_v2
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: 1111
+      POSTGRES_DB:  ${DB_NAME}
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
       - "5432:5432"
     restart: always
@@ -28,9 +30,10 @@ services:
     volumes:
       - ./src/main/resources/db/changelog:/liquibase/changelog
     command: update
+    env_file: .env
     environment:
-      - DATABASE_URL=jdbc:postgresql://postgres:5432/ecommerce_v2
-      - DATABASE_USERNAME=postgres
-      - DATABASE_PASSWORD=1111
+      - DATABASE_URL=jdbc:jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      - DATABASE_USERNAME=${DB_USERNAME}
+      - DATABASE_PASSWORD=${DB_PASSWORD}
     depends_on:
       - postgres
