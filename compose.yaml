@@ -2,17 +2,21 @@ version: '3.8'
 
 services:
   ecommerce-app:
-    build: ecommerce
+#    build: ecommerce
+    build: .
     ports:
-      - "8080:8080"
+      - "8082:8082"
     depends_on:
       - postgres
       - liquibase
     env_file: .env
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ecommerce_v2
+
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+
 
   postgres:
     image: postgres:latest
@@ -28,12 +32,15 @@ services:
   liquibase:
     image: liquibase/liquibase:latest
     volumes:
-      - ./src/main/resources/db/changelog:/liquibase/changelog
+      - ./src/main/resources/db/changelog:/liquibase/db/changelog
     command: update
+#    command: --changelog-file=./src/main/resources/db/changelog/db.changelog-master.yaml update
+#    command: --changelog-file=/liquibase/changelog/db.changelog-master.yaml update
     env_file: .env
     environment:
-      - DATABASE_URL=jdbc:jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
-      - DATABASE_USERNAME=${DB_USERNAME}
-      - DATABASE_PASSWORD=${DB_PASSWORD}
+      - LIQUIBASE_COMMAND_CHANGELOG_FILE=db/changelog/db.changelog-master.yaml
+      - LIQUIBASE_COMMAND_URL=jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      - LIQUIBASE_COMMAND_USERNAME=${DB_USERNAME}
+      - LIQUIBASE_COMMAND_PASSWORD=${DB_PASSWORD}
     depends_on:
       - postgres
