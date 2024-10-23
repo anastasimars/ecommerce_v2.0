@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import pl.ecommerce.util.values.Currency;
+import pl.ecommerce.util.values.ProductCategory;
 
 
 import java.math.BigDecimal;
@@ -28,8 +29,10 @@ public class ProductEntity {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "category")
-    private String category;
+//    @Column(name = "category")
+//    private String category;
+    @Column(name="category")
+    private ProductCategory category;
 
     @Column(name = "price")
     private BigDecimal price;
@@ -42,7 +45,7 @@ public class ProductEntity {
     private Integer stockState;
 
     public ProductEntity(UUID technicalId, String name, String description,
-                         String category, BigDecimal price,
+                         ProductCategory category, BigDecimal price,
                          Currency currency, Integer stockState) {
         this.technicalId = technicalId;
         this.name = name;
