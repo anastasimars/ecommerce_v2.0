@@ -11,11 +11,11 @@ services:
       - liquibase
     env_file: .env
     environment:
-      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST_DOCKER}:${DB_PORT}/${DB_NAME}
 #      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ecommerce_v2
-
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
+      SPRING_PROFILES_ACTIVE: docker
 
 
   postgres:
@@ -26,7 +26,9 @@ services:
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
     ports:
-      - "5432:5432"
+      - "5433:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
     restart: always
 
   liquibase:
@@ -39,7 +41,7 @@ services:
     env_file: .env
     environment:
       - LIQUIBASE_COMMAND_CHANGELOG_FILE=db/changelog/db.changelog-master.yaml
-      - LIQUIBASE_COMMAND_URL=jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}
+      - LIQUIBASE_COMMAND_URL=jdbc:postgresql://${DB_HOST_DOCKER}:${DB_PORT}/${DB_NAME}
       - LIQUIBASE_COMMAND_USERNAME=${DB_USERNAME}
       - LIQUIBASE_COMMAND_PASSWORD=${DB_PASSWORD}
     depends_on:

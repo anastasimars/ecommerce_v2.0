@@ -2,6 +2,7 @@ package pl.ecommerce.product.model.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import pl.ecommerce.util.values.Currency;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "products")
+@EqualsAndHashCode
 public class ProductEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

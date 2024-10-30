@@ -2,9 +2,9 @@ package pl.ecommerce.product.logic.repository;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.ecommerce.exception.ItemNotFoundException;
 import pl.ecommerce.product.model.entity.ProductEntity;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -12,8 +12,10 @@ import java.util.UUID;
 public class DataProductService {
     private final ProductRepository productRepository;
 
-    public Optional<ProductEntity> getProductByTechnicalId(UUID technicalId) {
+    public ProductEntity getProductByTechnicalId(UUID technicalId) {
         return productRepository
-                .findByTechnicalId(technicalId);
+                .findByTechnicalId(technicalId).orElseThrow(() ->
+                        new ItemNotFoundException(String.format("Item with id %s not found",
+                                technicalId)));
     }
 }
