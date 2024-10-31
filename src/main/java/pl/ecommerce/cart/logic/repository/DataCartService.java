@@ -3,8 +3,8 @@ package pl.ecommerce.cart.logic.repository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.ecommerce.cart.model.entity.CartEntity;
+import pl.ecommerce.exception.CartNotFoundException;
 
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -12,8 +12,10 @@ import java.util.UUID;
 public class DataCartService {
     private final CartRepository cartRepository;
 
-    public Optional<CartEntity> getCartByTechnicalId(UUID technicalId) {
-        return cartRepository.findByTechnicalId(technicalId);
+    public CartEntity getCartByTechnicalId(UUID technicalId) {
+        return cartRepository.findByTechnicalId(technicalId)
+                .orElseThrow(() -> new CartNotFoundException(String.format("No cart with cartId: %s",
+                        technicalId)));
     }
 
     public CartEntity saveCart(CartEntity cart) {

@@ -13,29 +13,35 @@ import static pl.ecommerce.PreparedTestConstants.*;
 public class TestData {
 
     public static CartEntity preparedTestEmptyCart(UUID userId) {
-        CartEntity cartEntity = new CartEntity(PREPARED_UUID,
+        CartEntity cartEntity = new CartEntity(PREPARED_CART_UUID,
                 new ArrayList<>(),
-               null);
+                null);
         cartEntity.assignUserToCart(userId);
         return cartEntity;
     }
 
     public static CartEntity preparedTestCartWithProduct(UUID userId) {
-        CartEntity cartEntity = new CartEntity(PREPARED_UUID,
+        CartEntity cartEntity = new CartEntity(PREPARED_CART_UUID,
                 new ArrayList<>(),
                 null);
-        ProductEntity productEntity = preparedTestProductEntity();
-        cartEntity.addProduct(productEntity, PREPARED_QUANTITY);
+        CartProductEntity cartProductEntity = preparedTestCartProduct_1(cartEntity);
+        cartEntity.getCartProducts().add(cartProductEntity);
         cartEntity.assignUserToCart(userId);
         return cartEntity;
     }
-    public static CartProductEntity preparedTestCartProduct(CartEntity cart) {
+
+    public static CartProductEntity preparedTestCartProduct_1(CartEntity cart) {
         return new CartProductEntity(cart,
-                preparedTestProductEntity(), 1);
+                preparedTestProductEntity_1(), PREPARED_QUANTITY);
     }
 
-    public static ProductEntity preparedTestProductEntity() {
-        return new ProductEntity(PREPARED_UUID,
+    public static CartProductEntity preparedTestCartProduct_2(CartEntity cart) {
+        return new CartProductEntity(cart,
+                preparedTestProductEntity_2(), PREPARED_QUANTITY);
+    }
+
+    public static ProductEntity preparedTestProductEntity_1() {
+        return new ProductEntity(PREPARED_PRODUCT1_UUID,
                 PREPARED_PRODUCT_NAME,
                 PREPARED_PRODUCT_DESCRIPTION,
                 PREPARED_PRODUCT_CATEGORY,
@@ -43,8 +49,9 @@ public class TestData {
                 PREPARED_CURRENCY,
                 PREPARED_STOCK_STATE);
     }
+
     public static ProductEntity preparedTestProductEntity_2() {
-        return new ProductEntity(PREPARED_UUID,
+        return new ProductEntity(PREPARED_PRODUCT2_UUID,
                 PREPARED_PRODUCT_NAME_2,
                 PREPARED_PRODUCT_DESCRIPTION,
                 PREPARED_PRODUCT_CATEGORY_2,
@@ -52,7 +59,6 @@ public class TestData {
                 PREPARED_CURRENCY,
                 PREPARED_STOCK_STATE);
     }
-
 
 
 }
