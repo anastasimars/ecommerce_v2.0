@@ -1,10 +1,18 @@
 spring:
-  profiles:
-    active: ${SPRING_PROFILE:local}
-
   liquibase:
     enabled: true
     change-log: db/changelog/db.changelog-master.yaml
+
+  datasource:
+    url: jdbc:postgresql://${DB_HOST_DOCKER}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    show-sql: true
+    hibernate:
+      ddl-auto: none
 
 logging:
   level:
