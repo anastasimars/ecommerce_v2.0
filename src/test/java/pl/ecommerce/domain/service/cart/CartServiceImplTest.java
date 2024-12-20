@@ -31,7 +31,6 @@ class CartServiceImplTest {
     @InjectMocks
     private CartServiceImpl cartSuT;
 
-
     @Test
     @DisplayName("should update quantity for existing product in the cart")
     void addItemToCart_whenProductExists_shouldUpdateCartProductQuantity() {

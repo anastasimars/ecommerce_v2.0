@@ -1,48 +1,55 @@
-version: '3.8'
+networks:
+  ecommerce_network:
+    driver: bridge
 
 services:
   ecommerce-app:
-#    build: ecommerce
     build: .
     ports:
       - "8082:8082"
+    container_name: ecommerce-app
     depends_on:
-      - postgres
-      - liquibase
+      - ecommerce_postgres_db
+      - ecommerce_liquibase_changesets
     env_file: .env
     environment:
       SPRING_DATASOURCE_URL: jdbc:postgresql://${DB_HOST_DOCKER}:${DB_PORT}/${DB_NAME}
-#      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/ecommerce_v2
       SPRING_DATASOURCE_USERNAME: ${DB_USERNAME}
       SPRING_DATASOURCE_PASSWORD: ${DB_PASSWORD}
-      SPRING_PROFILES_ACTIVE: docker
+    networks:
+      - ecommerce_network
+    restart: always
 
 
-  postgres:
-    image: postgres:latest
+  ecommerce_postgres_db:
+    image: postgres:alpine
+    container_name: ecommerce_postgres_db
     env_file: .env
     environment:
       POSTGRES_DB:  ${DB_NAME}
       POSTGRES_USER: ${DB_USERNAME}
       POSTGRES_PASSWORD: ${DB_PASSWORD}
-    ports:
-      - "5433:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
+    networks:
+      - ecommerce_network
     restart: always
 
-  liquibase:
+  ecommerce_liquibase_changesets:
     image: liquibase/liquibase:latest
+    container_name: ecommerce_liquibase_changesets
     volumes:
-      - ./src/main/resources/db/changelog:/liquibase/db/changelog
-    command: update
-#    command: --changelog-file=./src/main/resources/db/changelog/db.changelog-master.yaml update
-#    command: --changelog-file=/liquibase/changelog/db.changelog-master.yaml update
+      - ./src/main/resources/db/changelog/db.changelog-master.yaml:/liquibase/db/changelog/db.changelog-master.yaml
+    networks:
+      - ecommerce_network
+    command: --changelog-file=/liquibase/db/changelog/db.changelog-master.yaml
     env_file: .env
     environment:
-      - LIQUIBASE_COMMAND_CHANGELOG_FILE=db/changelog/db.changelog-master.yaml
       - LIQUIBASE_COMMAND_URL=jdbc:postgresql://${DB_HOST_DOCKER}:${DB_PORT}/${DB_NAME}
       - LIQUIBASE_COMMAND_USERNAME=${DB_USERNAME}
       - LIQUIBASE_COMMAND_PASSWORD=${DB_PASSWORD}
     depends_on:
-      - postgres
+      - ecommerce_postgres_db
+
+volumes:
+  pgdata:
